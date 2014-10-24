@@ -9,8 +9,10 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 
 #include <memory>
+#include <assert.h>
 #include <functional>
 
 #include <random>
@@ -19,4 +21,5 @@
 
 #include <time.h>
 
+#include <algorithm>
 #include <math.h>
