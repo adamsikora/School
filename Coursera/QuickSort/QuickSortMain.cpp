@@ -1,6 +1,7 @@
 #include "StlBase.h"
 
 #include "StopWatch.h"
+#include "Clipboard.h"
 
 typedef std::vector<int64_t>::iterator vectIt;
 
