@@ -8,7 +8,7 @@ struct Items {
 	uint64_t totalValue;
 };
 
-class Bandit : Specimen < std::vector<uint64_t> > {
+class Bandit : public Specimen < std::vector<uint64_t> > {
 public:
 	Bandit(double mutationRate, std::vector<uint64_t> value, uint64_t nBandits, std::shared_ptr<Items> items)
 		: Specimen(mutationRate, value), m_nBandits(nBandits), m_items(items)

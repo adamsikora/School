@@ -8,8 +8,10 @@
 
 #include "Encoding.h"
 
+#include "LearningEvolution.h"
 #include "Curver.h"
 #include "Bandit.h"
+#include "Salesman.h"
 
 int main()
 {
@@ -19,24 +21,52 @@ int main()
 	//CurveValue nc(0.05, 0ui64, std::pair<double, double>(-10.0, 10.0), func);
 	//
 	//Species<CurveValue> news(nc, 10000, 100);
-	uint64_t size = 1000;
-	std::vector<uint64_t> items;
-	items.reserve(size);
-	uint64_t total = 0;
-	for (int64_t i = 0; i < size; ++i) {
-		total += 100 + i;
-		items.push_back(100 + i);
-	}
-	
-	std::vector<uint64_t> init;
-	init.reserve(size);
-	for (int64_t i = 0; i < size; ++i) {
-		init.push_back(mersenneTwister() % 10);
-	}
 
-	Bandit nb(0.002, init, 10, std::make_shared<Items>(items, total));
-	Species<Bandit> news(nb, 1000, 20, 50, 0.5, 0.02);
-	news.evolve();
+	//uint64_t size = 1000;
+	//std::vector<uint64_t> items;
+	//items.reserve(size);
+	//uint64_t total = 0;
+	//for (uint64_t i = 0; i < size; ++i) {
+	//	total += 100 + i;
+	//	items.push_back(100 + i);
+	//}
+	//
+	//std::vector<uint64_t> init;
+	//init.reserve(size);
+	//for (uint64_t i = 0; i < size; ++i) {
+	//	init.push_back(mersenneTwister() % 10);
+	//}
+	//
+	//Bandit nb(0.002, init, 10, std::make_shared<Items>(items, total));
+	//Species<Bandit> news(nb, 1000, 20, 50, 0.5, 0.02);
+	//news.evolve();
+
+	//uint64_t size = 16;
+	//double pi = atan(1) * 4;
+	//std::vector<std::pair<double, double>> items;
+	//items.reserve(size);
+	//for (uint64_t i = 0; i < size; ++i) {
+	//	double pos = 2 * static_cast<double>(i) / static_cast<double>(size)*pi;
+	//	items.emplace_back(sin(pos), cos(pos));
+	//}
+	//std::vector<uint64_t> init;
+	//init.reserve(size);
+	//for (uint64_t i = 0; i < size / 2; ++i) {
+	//	init.push_back(2*i);
+	//}
+	//for (uint64_t i = 0; i < size / 2; ++i) {
+	//	init.push_back(2*i + 1);
+	//}
+	//Salesman ns(0.05, init, std::make_shared<CityPositions>(items));
+	//BlindEvolution<Salesman> s(ns, 100000, 2*pi, 20, 3, 1.0, 0.0);
+	//s.evolve();
+
+	std::function<double(double)> func = [](double var) {return var*var + sin(10 * var); };
+
+	for (uint64_t i = 0; i < 10; ++i) {
+		LearningEvolution news(0, 0.05, 100, 1000, 3, std::pair<double, double>(-10.0, 10.0), func);
+		news.evolve();
+	}
 
 	sw.stop();
 	std::cout << sw.getLastElapsed();

@@ -12,8 +12,7 @@
 #include <iomanip>
 
 #include "Encoding.h"
-
-std::mt19937_64 mersenneTwister;
+#include "RandomUtils.h"
 
 template <typename specimenType>
 class Specimen {
@@ -44,11 +43,11 @@ protected:
 };
 
 template <typename specimenType>
-class Species {
+class BlindEvolution {
 public:
-	Species(specimenType foreFather, uint64_t nIterations, uint64_t nMutations, uint64_t nSurvivors, double mutationProb, double reproductionProb)
+	BlindEvolution(specimenType foreFather, uint64_t nIterations, double fitnessTarget, uint64_t nMutations, uint64_t nSurvivors, double mutationProb, double reproductionProb)
 		: m_nIterations(nIterations), m_nMutations(nMutations), m_nSurvivors(nSurvivors),
-		m_mutationProbability(mutationProb), m_reproductionProbability(reproductionProb)
+		m_mutationProbability(mutationProb), m_reproductionProbability(reproductionProb), m_fitnessTarget(fitnessTarget)
 	{
 		m_specimens.insert(foreFather);
 	}
@@ -69,17 +68,17 @@ public:
 
 	virtual void reproducePopulation()
 	{
-		std::multiset<specimenType> newGeneration;
-		for (std::multiset<specimenType>::iterator it = m_specimens.begin(); it != m_specimens.end(); ++it) {
-			std::multiset<specimenType>::iterator jt = it;
-			++jt;
-			for (jt; jt != m_specimens.end(); ++jt) {
-				if (mersenneTwister() < m_reproductionProbability*std::numeric_limits<uint64_t>::max()) {
-					specimenType newsp = it->reproduce(*jt);
-					newGeneration.insert(newsp);
-				}
-			}
-		}
+		//std::multiset<specimenType> newGeneration;
+		//for (std::multiset<specimenType>::iterator it = m_specimens.begin(); it != m_specimens.end(); ++it) {
+		//	std::multiset<specimenType>::iterator jt = it;
+		//	++jt;
+		//	for (jt; jt != m_specimens.end(); ++jt) {
+		//		if (mersenneTwister() < m_reproductionProbability*std::numeric_limits<uint64_t>::max()) {
+		//			specimenType newsp = it->reproduce(*jt);
+		//			newGeneration.insert(newsp);
+		//		}
+		//	}
+		//}
 	};
 	virtual void reducePopulation()
 	{
@@ -99,15 +98,18 @@ public:
 			reducePopulation();
 			if (bestFitness >(m_specimens.begin())->fitness()) {
 				bestFitness = (m_specimens.begin())->fitness();
-				std::cout << "new best result at: " << /*(m_specimens.begin())->value() << */" with fitness value of: " << bestFitness << std::endl;
+				std::cout << "new best result at: " << (m_specimens.begin())->value() << " with fitness value of: " << bestFitness << std::endl;
+			}
+			if (bestFitness < m_fitnessTarget) {
+				break;
 			}
 		}
-		//std::cout << m_specimens.begin()->value();
+		std::cout << m_specimens.begin()->value() << std::endl;
 	}
 
 protected:
 	std::multiset<specimenType> m_specimens;
-	double m_mutationProbability, m_reproductionProbability;
+	double m_mutationProbability, m_reproductionProbability, m_fitnessTarget;
 	uint64_t m_nIterations, m_nMutations,  m_nSurvivors;
 };
 

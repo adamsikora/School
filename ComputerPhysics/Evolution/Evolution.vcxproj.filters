@@ -27,9 +27,15 @@
     <ClInclude Include="Species.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Salesman.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LearningEvolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="EvolutionMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
