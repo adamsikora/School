@@ -2,7 +2,7 @@
 #include <iostream>
 #include <bitset>
 
-#include "engine.h"
+#include "MatlabEngine.h"
 
 #include "Stopwatch.h"
 
@@ -61,12 +61,20 @@ int main()
 	//BlindEvolution<Salesman> s(ns, 100000, 2*pi, 20, 3, 1.0, 0.0);
 	//s.evolve();
 
-	std::function<double(double)> func = [](double var) {return var*var + sin(10 * var); };
+	//std::function<double(double)> func = [](double var) {return var*var + sin(10 * var); };
+	//
+	//for (uint64_t i = 0; i < 10; ++i) {
+	//	LearningEvolution news(0, 0.05, 100, 1000, 3, std::pair<double, double>(-10.0, 10.0), func);
+	//	news.evolve();
+	//}
 
-	for (uint64_t i = 0; i < 10; ++i) {
-		LearningEvolution news(0, 0.05, 100, 1000, 3, std::pair<double, double>(-10.0, 10.0), func);
-		news.evolve();
+	std::vector<std::pair<double, double>> data;
+	for (double i = 0; i < 100; ++i) {
+		data.emplace_back(i, i*i);
 	}
+
+	utils::matlab::plot(data);
+	//utils::plot(/*std::vector<std::pair<double, double>> data*/);
 
 	sw.stop();
 	std::cout << sw.getLastElapsed();

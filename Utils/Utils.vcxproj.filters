@@ -27,9 +27,15 @@
     <ClInclude Include="Clipboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MatlabEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RandomUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatlabEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

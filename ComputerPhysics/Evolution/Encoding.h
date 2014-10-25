@@ -1,10 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <assert.h>
-#include <cstddef>
-
-#include <limits>
+#include "StlBase.h"
 
 uint64_t binToGray(uint64_t bin) {
 	return bin ^ (bin / 2);
