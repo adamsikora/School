@@ -19,7 +19,7 @@ public:
 		uint64_t  gray(binToGray(m_value));
 		std::bitset<8 * sizeof(uint64_t)> bs(gray);
 		for (uint64_t i = 0; i < 8 * sizeof(uint64_t); ++i) {
-			if (mersenneTwister() < m_mutationRate*std::numeric_limits<uint64_t>::max()) {
+			if (utils::decide(m_mutationRate)) {
 				bs.flip(i);
 			}
 		}

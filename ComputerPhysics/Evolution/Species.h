@@ -57,7 +57,7 @@ public:
 		std::multiset<specimenType> newGeneration;
 		for (auto &specimen : m_specimens) {
 			for (uint64_t i = 0; i < m_nMutations; ++i) {
-				if (mersenneTwister() < m_mutationProbability*std::numeric_limits<uint64_t>::max()) {
+				if (decide(m_mutationProbability)) {
 					specimenType newsp = specimen.mutate();
 					newGeneration.insert(newsp);
 				}
@@ -73,7 +73,7 @@ public:
 		//	std::multiset<specimenType>::iterator jt = it;
 		//	++jt;
 		//	for (jt; jt != m_specimens.end(); ++jt) {
-		//		if (mersenneTwister() < m_reproductionProbability*std::numeric_limits<uint64_t>::max()) {
+		//		if (decide(m_reproductionProbability)) {
 		//			specimenType newsp = it->reproduce(*jt);
 		//			newGeneration.insert(newsp);
 		//		}

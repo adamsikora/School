@@ -30,7 +30,7 @@ public:
 		uint64_t size = newValue.size();
 		for (uint64_t i = 0; i < size; ++i) {
 			for (uint64_t j = 0; j < size; ++j) {
-				if (mersenneTwister() < m_mutationRate*std::numeric_limits<uint64_t>::max()) {
+				if (utils::decide(m_mutationRate)) {
 					std::swap(newValue[i], newValue[j]);
 				}
 			}
@@ -40,7 +40,7 @@ public:
 	/*Bandit reproduce(Bandit mate) const {
 		std::vector<uint64_t> newValue = m_value;
 		for (int i = 0; i < m_value.size(); ++i) {
-			if (mersenneTwister() < 0.5*std::numeric_limits<uint64_t>::max()) {
+			if (utils::decide(0.5)) {
 				newValue[i] = mate.vectValue()[i];
 			}
 		}

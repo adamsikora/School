@@ -15,7 +15,7 @@
 
 int main()
 {
-	StopWatch sw(true);
+	utils::StopWatch sw(true);
 
 	//std::function<double(double)> func = [](double var) {return var*var+sin(10*var); };
 	//CurveValue nc(0.05, 0ui64, std::pair<double, double>(-10.0, 10.0), func);

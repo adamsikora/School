@@ -2,9 +2,9 @@
 
 #include "StlBase.h"
 
-std::mt19937_64 mersenneTwister;
-
-bool decide(double rate)
+namespace utils
 {
-	return mersenneTwister() < rate*std::numeric_limits<uint64_t>::max();
+
+	bool decide(double rate);
+
 }
