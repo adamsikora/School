@@ -39,6 +39,14 @@ public:
 	friend class EventLists;
 
    void updateLattice(const Change& src, const Change& dest);    // updates lattice state after event
+	std::vector<uint64_t> toVector() {
+		std::vector<uint64_t> result;
+		result.reserve(c::A);
+		for (uint64_t i = 0; i < c::A; ++i) {
+			result.push_back(_lattice[i].getAtom());
+		}
+		return std::move(result);
+	}
 
 	inline int present(int pos) const { return _lattice[pos].getAtom();}
    // checks whether atom is present at given position

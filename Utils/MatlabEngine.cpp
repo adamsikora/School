@@ -50,9 +50,9 @@ namespace utils
 
 			engEvalString(ep, "plot(X,Y);");
 
-			engEvalString(ep, "title('Position vs. Time for a falling object');");
-			engEvalString(ep, "xlabel('Time (seconds)');");
-			engEvalString(ep, "ylabel('Position (meters)');");
+			//engEvalString(ep, "title('Position vs. Time for a falling object');");
+			//engEvalString(ep, "xlabel('Time (seconds)');");
+			//engEvalString(ep, "ylabel('Position (meters)');");
 
 			mxDestroyArray(matlabX);
 			mxDestroyArray(matlabY);

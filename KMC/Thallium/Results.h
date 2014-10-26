@@ -95,13 +95,21 @@ public:
    inline void addGridState(const std::vector<GridCell>& lattice)     // adds current grid state for graphical output
    {
       gridStates.push_back(lattice);
-		std::vector<double> toshow;
-		toshow.reserve(c::A);
-		for (auto &cell : lattice) {
-			toshow.push_back(cell.getAtom());
-		}
-		utils::matlab::draw(toshow, std::pair<uint64_t, uint64_t>(c::w, c::h));
+		showInMatlab(lattice);
    }
+
+	inline void showInMatlab(const std::vector<GridCell>& lattice)
+	{
+		std::vector<double> toshow(c::A, 0.0);
+
+		for (uint64_t j = 0; j < c::h; ++j) {
+			for (uint64_t i = 0; i < c::w; ++i) {
+				toshow[c::w * j + (i + j / 2) % c::w] = lattice[i + c::w * j].getAtom();
+			}
+		}
+
+		utils::matlab::draw(toshow, std::pair<uint64_t, uint64_t>(c::w, c::h));
+	}
    std::vector<std::string> getPDBs(bool all = true, bool zkrychlit = true);  // gets data for output for jMol
    std::vector<std::vector<bool>> getBMPs(bool all = true);                   // gets data for bmp output
 

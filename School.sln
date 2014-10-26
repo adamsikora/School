@@ -63,16 +63,16 @@ Global
 		{50D4AAED-46D6-4C5C-BD9B-60C24B1B6E61}.Release|Win32.Build.0 = Release|x64
 		{50D4AAED-46D6-4C5C-BD9B-60C24B1B6E61}.Release|x64.ActiveCfg = Release|x64
 		{50D4AAED-46D6-4C5C-BD9B-60C24B1B6E61}.Release|x64.Build.0 = Release|x64
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Mixed Platforms.ActiveCfg = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Mixed Platforms.Build.0 = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Win32.ActiveCfg = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Win32.Build.0 = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|x64.ActiveCfg = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|x64.Build.0 = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Win32.ActiveCfg = Release|Win32
-		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Win32.Build.0 = Release|Win32
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Mixed Platforms.ActiveCfg = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Mixed Platforms.Build.0 = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Win32.ActiveCfg = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|Win32.Build.0 = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|x64.ActiveCfg = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Debug|x64.Build.0 = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Mixed Platforms.Build.0 = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Win32.ActiveCfg = Release|x64
+		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Win32.Build.0 = Release|x64
 		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|x64.ActiveCfg = Release|x64
 		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection

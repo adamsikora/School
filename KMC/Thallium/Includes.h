@@ -9,6 +9,8 @@ basic includes: stl containers, stream manipulation, multithreading, math, time,
 #include <set>
 #include <string>
 
+#include <limits.h>
+
 #include <iostream>
 #include <iomanip>
 #include <sstream>
