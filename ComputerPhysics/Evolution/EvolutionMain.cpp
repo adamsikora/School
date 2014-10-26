@@ -68,13 +68,19 @@ int main()
 	//	news.evolve();
 	//}
 
-	std::vector<std::pair<double, double>> data;
-	for (double i = 0; i < 100; ++i) {
-		data.emplace_back(i, i*i);
+	//std::vector<std::pair<double, double>> data;
+	//for (double i = 0; i < 100; ++i) {
+	//	data.emplace_back(i, i*i);
+	//}
+	//
+	//utils::matlab::plot(data);
+	uint64_t x = 5, y = 3;
+	std::vector<double> img;
+	for (double i = 0; i < x*y; ++i) {
+		img.emplace_back(i);
 	}
-
-	utils::matlab::plot(data);
-	//utils::plot(/*std::vector<std::pair<double, double>> data*/);
+	
+	utils::matlab::draw(img, std::pair<uint64_t, uint64_t>(x, y), "jet");
 
 	sw.stop();
 	std::cout << sw.getLastElapsed();

@@ -7,7 +7,7 @@ namespace utils
 	namespace matlab
 	{
 		void plot(const std::vector<std::pair<double, double>>& data);
-		void show();
+		void draw(const std::vector<double>& data, std::pair<uint64_t, uint64_t> range, std::string colormap = "jet");
 		void evaluate(std::string command);
 	}
 }

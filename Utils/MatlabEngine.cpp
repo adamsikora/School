@@ -20,6 +20,13 @@ namespace utils
 			}
 		}
 
+		void evaluate(std::string command)
+		{
+			engineInit();
+
+			engEvalString(ep, command.c_str());
+		}
+
 		void plot(const std::vector<std::pair<double, double>>& data)
 		{
 			engineInit();
@@ -49,24 +56,31 @@ namespace utils
 
 			mxDestroyArray(matlabX);
 			mxDestroyArray(matlabY);
+		}
 
-			//mxArray *T = NULL, *result = NULL;
-			//double time[10] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0 };
-			//
-			//T = mxCreateDoubleMatrix(1, 10, mxREAL);
-			//memcpy((void *)mxGetPr(T), (void *)time, sizeof(time));
-			//
-			//engPutVariable(ep, "T", T);
-			//
-			//engEvalString(ep, "D = .5.*(-9.8).*T.^2;");
-			//
-			//engEvalString(ep, "plot(T,D);");
-			//engEvalString(ep, "title('Position vs. Time for a falling object');");
-			//engEvalString(ep, "xlabel('Time (seconds)');");
-			//engEvalString(ep, "ylabel('Position (meters)');");
-			//
-			//mxDestroyArray(T);
-			//engEvalString(ep, "close;");
+
+		void draw(const std::vector<double>& data, std::pair<uint64_t, uint64_t> range, std::string colormap)
+		{
+			engineInit();
+
+			const uint64_t size = data.size();
+			double *img = new double[size];
+
+			for (uint64_t i = 0; i < range.first; ++i) {
+				for (uint64_t j = 0; j < range.second; ++j) {
+					img[j + range.second*i] = data[i + range.first*j];
+				}
+			}
+
+			mxArray *matlabImg = mxCreateDoubleMatrix(range.second, range.first, mxREAL);
+			memcpy((void *)mxGetPr(matlabImg), (void *)img, sizeof(img)*size);
+
+			engPutVariable(ep, "img", matlabImg);
+
+			engEvalString(ep, "imagesc(img);");
+			engEvalString(ep, std::string("colormap(" + colormap + ");").c_str());
+
+			mxDestroyArray(matlabImg);
 		}
 	}
 }
