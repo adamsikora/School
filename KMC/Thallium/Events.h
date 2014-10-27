@@ -14,7 +14,9 @@ defines main class for KMC simulation
 #include "Evolution.h"
 #include "Eventlist.h"
 #include "Neighborhood.h"
-#include "Results.h"
+#include "Parameters.h"
+#include "State.h"
+#include "Reporter.h"
 
 enum simulationReturn
 {
@@ -24,7 +26,8 @@ enum simulationReturn
 class Events
 {
 public:
-	Events(Report& report);
+	//Events(Report& report);
+	Events(State state);
 
    //simulationReturn desorptionSimulation();  // runs desorption simulation
    simulationReturn growthSimulation();      // runs growth simulation
@@ -49,23 +52,11 @@ public:
 	int crossCheck(bool showResults = true);    // checks state of class for possible errors for debugging only
 	bool checkDiff(int supposedConf, SD conf);
 
-	void step() {
-		for (int i = 0; i < c::w; i++) {
-			for (int j = 0; j < i; j++) {
-				std::cout << " ";
-			}
-			std::cout << "\\ ";
-			for (int j = 0; j < c::h; j++) {
-				std::cout << grid._lattice[i*c::w + j].getAtom() << " ";
-			}
-			std::cout << "\\" << std::endl;
-		}
-		std::cout << _nEvents << std::endl;
-	}
-
 private:
-   Parameters& para;
-   Results& results;
+	ParametersInternal para;
+	Parameters param;
+
+	Reporter m_reporter;
 
    Evolution evolution;
 	Grid grid;
@@ -93,7 +84,7 @@ private:
 	int _seed;
 	MTRand _random;
 
-   std::vector<double> getResultVector();    // functions for passing simulation output
+   Results getResults();    // functions for passing simulation output
    //std::vector<double> getOtherData();
 
 };

@@ -33,7 +33,16 @@ private:
 class Grid
 {
 public:
-	Grid(int initialHeight) : _lattice(c::A, GridCell()) {}
+	//Grid(int initialHeight) : _lattice(c::A, GridCell()) {}
+	Grid(const std::vector<uint64_t>& lattice) : _lattice(c::A, GridCell())
+	{
+		for (uint64_t i = 0; i < c::A; ++i) {
+			_lattice[i].setAtom(lattice[i]);
+		}
+		for (uint64_t i = 0; i < c::A; ++i) {
+			_lattice[i].setVicinity(vicinityCount(i));
+		}
+	}
 
 	friend class Events;
 	friend class EventLists;

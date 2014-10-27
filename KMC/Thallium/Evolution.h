@@ -13,7 +13,7 @@ defines class for managing time and temperature evolution of the system
 #include "mtrand.h"
 
 //#include "Theta.h"
-#include "Results.h"
+#include "Parameters.h"
 #include "Rates.h"
 
 class Events;
@@ -21,7 +21,7 @@ class Events;
 class Evolution
 {
 public:
-   Evolution(const Parameters& para);
+	Evolution(ParametersInternal para);
 
    /*void pushThetaDCD(double currCoverage, const std::vector<int>&nDesNeigh, std::vector<double> otherData);
 
@@ -41,7 +41,7 @@ private:
 
    MTRand_open _trandom;
 
-   Parameters _para;
+	ParametersInternal _para;
 
    /*double _initialTemperature;
    double _temperatureStep;

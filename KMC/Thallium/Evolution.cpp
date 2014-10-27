@@ -1,7 +1,7 @@
 #include "Evolution.h"
 
 
-Evolution::Evolution(const Parameters& para) : _para(para), _rates()//, theta(para)
+Evolution::Evolution(ParametersInternal para) : _para(para), _rates()//, theta(para)
 {
 
    /*_initialTemperature = para.T;

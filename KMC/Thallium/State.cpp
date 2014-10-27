@@ -25,7 +25,7 @@ namespace {
 	}
 }
 
-State::State(next::Parameters para, next::Results result, const std::vector<uint64_t>& grid)
+State::State(Parameters para, Results result, const std::vector<uint64_t>& grid)
 	: parameters(para), results(result), lattice(grid), width(c::w), height(c::h)
 {
 
@@ -36,7 +36,7 @@ State::State(std::string filename) : lattice(c::A, 0), width(c::w), height(c::h)
 	loadState(filename);
 }
 
-void State::alterState(next::Parameters para, next::Results result, const Grid& grid)
+void State::alterState(Parameters para, Results result, const Grid& grid)
 {
 	parameters = para;
 	results = result;
@@ -65,7 +65,10 @@ void State::loadState(std::string fileName)
 
 	while (file.getline(buffer, bufferSize)) {
 		std::string line = buffer;
-		if (line == parametersHead) {
+		if (line == "") {
+			continue;
+		}
+		else if (line == parametersHead) {
 			state = readingState::rparameters;
 		}
 		else if (line == resultsHead) {
@@ -103,7 +106,7 @@ void State::loadState(std::string fileName)
 				uint64_t current = 0, count = 0;
 				ss >> count;
 				if (count == 0) {
-					std::cout << "wrong grid format in stat file" << endLine;
+					std::cout << "wrong grid format in state file" << endLine;
 				}
 				ss >> current;
 				for (uint64_t i = 0; i < count; ++i, ++gridPosition) {
@@ -117,6 +120,9 @@ void State::loadState(std::string fileName)
 			}
 		}
 	}
+	if (!(gridPosition == c::A || gridPosition == 0)) {
+		std::cout << "wrong grid dimensions in state file";
+	}
 
 	file.close();
 }
@@ -129,24 +135,24 @@ void State::saveState(std::string fileName)
 		std::cout << "failed to write to state file\n";
 	}
 
-	file << parametersHead << endLine;
+	file << endLine << parametersHead << endLine << endLine;
 
 	for (auto &parameter : parameters.getAll()) {
 		file << parameter.first << equals << parameter.second << endLine;
 	}
 
-	file << latticeDimensionsHead << endLine;
+	file << endLine << latticeDimensionsHead << endLine << endLine;
 
 	file << latticeWidth << equals << width << endLine;
 	file << latticeHeight << equals << height << endLine;
 
-	file << resultsHead << endLine;
+	file << endLine << resultsHead << endLine << endLine;
 
 	for (auto &result : results.getAll()) {
 		file << result.first << equals << result.second << endLine;
 	}
 
-	file << gridHead << endLine;
+	file << endLine << gridHead << endLine << endLine;
 
 	uint64_t current = lattice[0];		// lattice encoded by chunks of same value
 	uint64_t count = 1;

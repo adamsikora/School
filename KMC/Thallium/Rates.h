@@ -11,7 +11,7 @@ header only
 #define RATES_H
 
 #include "Includes.h"
-#include "Results.h"
+#include "Parameters.h"
 
 class Rates
 {
@@ -38,7 +38,7 @@ public:
 	}
 
 
-	void setRates(const Parameters& para)
+	void setRates(const ParametersInternal& para)
 	{
 		ads = para.layersPerSec;
       for (int si = 0; si < c::nNeighCount; si++) {

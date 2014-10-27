@@ -1,22 +1,42 @@
 #include "Events.h"
 
-Events::Events(Report& report)
-: para(report.parameters), results(report.results), evolution(para), rates(evolution._rates),
-grid(para.initialHeight), eventLists(grid._lattice), _nDesorbNeigh(c::nNeighCount, 0)
+Events::Events(State state)
+	: para(
+	state.getParameter("nu"), state.getParameter("T"),
+	state.getParameter("E_M_M"), state.getParameter("E_M_Si"), state.getParameter("E_M_Tl"),
+	state.getParameter("E_bM"), state.getParameter("E_b100"), state.getParameter("E_b111"),
+	state.getParameter("layersPerSec"), state.getParameter("targetCoverage"), static_cast<int>(state.getParameter("seed"))
+	),
+	param(state.getParameters()), m_reporter(state),
+	evolution(para), rates(evolution._rates), grid(state.getLattice()),
+	eventLists(grid._lattice), _nDesorbNeigh(c::nNeighCount, 0)
 {
 	_nEvents = 0;
-	_nAds = 0; _nDes = 0; _nDiff = 0; //_nDownDiff = 0; _nUpDiff = 0; _nFreeDes = 0;
+	_nAds = 0; _nDes = 0; _nDiff = 0;
 	_nMetal = _nSilicon = 0;
-
-	//_adsHeight = para.initialHeight + 1;
 
 	_targetCoverage = para.targetCoverage;
 
 	_random.seed(para.seed);
 
-	/*if (para.initialHeight)
-		for (int i = 0; i < c::A; i++)
-			addNewSrcEvents(Position(i, 1));*/
+	for (int i = 0; i < c::A; ++i) {
+		switch (grid._lattice[i].getAtom()) {
+		case atomType::metal: {
+			addNewSrcEvents(i);
+			++_nMetal;
+			break;
+		}
+		case atomType::nothing: {
+			addNewDestEvents(i);
+			break;
+		}
+		case atomType::silicon: {
+			++_nSilicon;
+			break;
+		}
+		}
+	}
+	crossCheck();
 }
 
 //simulationReturn Events::desorptionSimulation()
@@ -65,20 +85,13 @@ void Events::adsorbIslands(int nIslands, int islandSize)
 
 simulationReturn Events::growthSimulation()
 {
-	/*std::cout << std::endl;
-	for (int i = 0; i < 4; i++) {
-		std::cout << evolution._rates.getRate(0, i, 0);
-	}
-	for (int i = 0; i < 4; i++) {
-		std::cout << evolution._rates.getRate(i, 0, 0);
-	}
-	std::cin.ignore();*/
-
 	int position = c::A / 2 + c::w / 3;
 	//for (int n = 0; n < 6; n++) {
 	//	adsorption(neigh::neigh(n,position), atomType::silicon);
 	//}
-	adsorption(position, atomType::silicon);
+	//adsorption(position, atomType::silicon);
+
+	m_reporter.addState(State(param, getResults(), grid.toVector()));
 
 	int nShows = 10;
 	double currTarget = _targetCoverage / 10;
@@ -92,35 +105,13 @@ simulationReturn Events::growthSimulation()
 			}
       }
 		if (_getCoverage() > currTarget) {
-			results.addGridState(grid._lattice);
-			results.addRow(getResultVector());
+			m_reporter.addState(State(param, getResults(), grid.toVector()));
 			currTarget += _targetCoverage / 10;
 		}
       execute();
 	}
+	m_reporter.addState(State(param, getResults(), grid.toVector()));
 	crossCheck();
-   results.addGridState(grid._lattice);
-   results.addRow(getResultVector());
-
-	/*double relaxTime = 50.0;
-	double targetTime = evolution._masterTime + relaxTime;
-
-	evolution._rates.ads = 0.0;
-	evolution._rates.totalAds = 0.0;
-
-	while (evolution._masterTime < targetTime) {
-		if (_nEvents % 1000000 == 0) {
-			std::cout << _nEvents << "\t" << _getCoverage() << std::endl;
-			if (crossCheck(false) != 0) {
-				crossCheck();
-				std::cin.ignore();
-			}
-		}
-		execute();
-	}
-	crossCheck();
-	results.addGridState(grid._lattice);
-	results.addRow(getResultVector());*/
 
    return simulationReturn::allright;
 }
@@ -217,25 +208,18 @@ void Events::evolve()
    }*/
 }
 
-std::vector<double> Events::getResultVector()
+Results Events::getResults()
 {
-   return
-      std::vector<double> {
-      evolution._masterTime,
-         static_cast<double>(_getnActions()),
-         static_cast<double>(_nMetal),
-         static_cast<double>(_nSilicon),
-         _getCoverage(),
-         static_cast<double>(_nAds),
-         static_cast<double>(_nDes),
-         0,
-         static_cast<double>(_nDiff),
-         0,
-         0,
-         0,//static_cast<double>(grid.cluster.freeAtomCount()),
-         0,//static_cast<double>(grid.cluster.clusterCount()),
-         evolution._para.T
-      };
+	Results res;
+	res.set("nActions", _getnActions());
+	res.set("nMetal", _nMetal);
+	res.set("nSilicon", _nSilicon);
+	res.set("coverage", _getCoverage());
+	res.set("nAds", _nAds);
+	res.set("nDes", _nDes);
+	res.set("nDiff", _nDiff);
+	res.set("T", evolution._para.T);
+	return res;
 }
 
 //int Events::getnBorderAtoms()

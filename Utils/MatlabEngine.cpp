@@ -18,6 +18,21 @@ namespace utils
 					}
 				}
 			}
+
+			void drawInternal(double *img, uint64_t size, std::pair<uint64_t, uint64_t> range, std::string colormap)
+			{
+				engineInit();
+
+				mxArray *matlabImg = mxCreateDoubleMatrix(range.second, range.first, mxREAL);
+				memcpy((void *)mxGetPr(matlabImg), (void *)img, sizeof(img)*size);
+
+				engPutVariable(ep, "img", matlabImg);
+
+				engEvalString(ep, "imagesc(img);");
+				engEvalString(ep, std::string("colormap(" + colormap + ");").c_str());
+
+				mxDestroyArray(matlabImg);
+			}
 		}
 
 		void evaluate(std::string command)
@@ -58,11 +73,8 @@ namespace utils
 			mxDestroyArray(matlabY);
 		}
 
-
 		void draw(const std::vector<double>& data, std::pair<uint64_t, uint64_t> range, std::string colormap)
 		{
-			engineInit();
-
 			const uint64_t size = data.size();
 			double *img = new double[size];
 
@@ -72,15 +84,21 @@ namespace utils
 				}
 			}
 
-			mxArray *matlabImg = mxCreateDoubleMatrix(range.second, range.first, mxREAL);
-			memcpy((void *)mxGetPr(matlabImg), (void *)img, sizeof(img)*size);
+			drawInternal(img, size, range, colormap);
+		}
 
-			engPutVariable(ep, "img", matlabImg);
+		void draw(const std::vector<uint64_t>& data, std::pair<uint64_t, uint64_t> range, std::string colormap)
+		{
+			const uint64_t size = data.size();
+			double *img = new double[size];
 
-			engEvalString(ep, "imagesc(img);");
-			engEvalString(ep, std::string("colormap(" + colormap + ");").c_str());
+			for (uint64_t i = 0; i < range.first; ++i) {
+				for (uint64_t j = 0; j < range.second; ++j) {
+					img[j + range.second*i] = static_cast<double>(data[i + range.first*j]);
+				}
+			}
 
-			mxDestroyArray(matlabImg);
+			drawInternal(img, size, range, colormap);
 		}
 	}
 }
