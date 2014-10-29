@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Evolution", "ComputerPhysic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Thallium", "KMC\Thallium\Thallium.vcxproj", "{4166E14C-7988-4383-B447-B8F4433EF284}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MinCut", "Coursera\MinCut\MinCut.vcxproj", "{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -75,6 +77,18 @@ Global
 		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|Win32.Build.0 = Release|x64
 		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|x64.ActiveCfg = Release|x64
 		{4166E14C-7988-4383-B447-B8F4433EF284}.Release|x64.Build.0 = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Debug|Mixed Platforms.ActiveCfg = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Debug|Mixed Platforms.Build.0 = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Debug|Win32.ActiveCfg = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Debug|Win32.Build.0 = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Debug|x64.ActiveCfg = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Debug|x64.Build.0 = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Release|Mixed Platforms.Build.0 = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Release|Win32.ActiveCfg = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Release|Win32.Build.0 = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Release|x64.ActiveCfg = Release|x64
+		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
