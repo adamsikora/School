@@ -2,103 +2,98 @@
 #include "MatlabEngine.h"
 #include "engine.h"
 
-namespace utils
-{
-	namespace matlab
-	{
-		namespace {
-			const uint64_t bufferSize = 256;
-			Engine *ep = nullptr;
+namespace utils {
+namespace matlab {
+namespace {
 
-			void engineInit()
-			{
-				if (ep == nullptr) {
-					if (!(ep = engOpen(""))) {
-						fprintf(stderr, "\nCan't start MATLAB engine\n");
-					}
-				}
-			}
+const uint64_t bufferSize = 256;
+Engine *ep = nullptr;
 
-			void drawInternal(double *img, uint64_t size, std::pair<uint64_t, uint64_t> range, std::string colormap)
-			{
-				engineInit();
+void engineInit() {
+  if (ep == nullptr) {
+    if (!(ep = engOpen(""))) {
+      fprintf(stderr, "\nCan't start MATLAB engine\n");
+    }
+  }
 
-				mxArray *matlabImg = mxCreateDoubleMatrix(range.second, range.first, mxREAL);
-				memcpy((void *)mxGetPr(matlabImg), (void *)img, sizeof(img)*size);
+}
 
-				engPutVariable(ep, "img", matlabImg);
+void drawInternal(double *img, uint64_t size, std::pair<uint64_t, uint64_t> range, std::string colormap) {
+  engineInit();
 
-				engEvalString(ep, "imagesc(img);");
-				engEvalString(ep, std::string("colormap(" + colormap + ");").c_str());
+  mxArray *matlabImg = mxCreateDoubleMatrix(range.second, range.first, mxREAL);
+  memcpy((void *)mxGetPr(matlabImg), (void *)img, sizeof(img)*size);
 
-				mxDestroyArray(matlabImg);
-			}
-		}
+  engPutVariable(ep, "img", matlabImg);
 
-		void evaluate(std::string command)
-		{
-			engineInit();
+  engEvalString(ep, "imagesc(img);");
+  engEvalString(ep, std::string("colormap(" + colormap + ");").c_str());
 
-			engEvalString(ep, command.c_str());
-		}
+  mxDestroyArray(matlabImg);
+}
+}
 
-		void plot(const std::vector<std::pair<double, double>>& data)
-		{
-			engineInit();
+void evaluate(std::string command) {
+  engineInit();
 
-			const uint64_t size = data.size();
-			double *x = new double[size], *y = new double[size];
+  engEvalString(ep, command.c_str());
+}
 
-			for (uint64_t i = 0; i < size; ++i) {
-				x[i] = data[i].first;
-				y[i] = data[i].second;
-			}
+void plot(const std::vector<std::pair<double, double>>& data) {
+  engineInit();
 
-			mxArray *matlabX = mxCreateDoubleMatrix(1, size, mxREAL);
-			mxArray *matlabY = mxCreateDoubleMatrix(1, size, mxREAL);
+  const uint64_t size = data.size();
+  double *x = new double[size], *y = new double[size];
 
-			memcpy((void *)mxGetPr(matlabX), (void *)x, sizeof(x)*size);
-			memcpy((void *)mxGetPr(matlabY), (void *)y, sizeof(y)*size);
+  for (uint64_t i = 0; i < size; ++i) {
+    x[i] = data[i].first;
+    y[i] = data[i].second;
+  }
 
-			engPutVariable(ep, "X", matlabX);
-			engPutVariable(ep, "Y", matlabY);
+  mxArray *matlabX = mxCreateDoubleMatrix(1, size, mxREAL);
+  mxArray *matlabY = mxCreateDoubleMatrix(1, size, mxREAL);
 
-			engEvalString(ep, "plot(X,Y);");
+  memcpy((void *)mxGetPr(matlabX), (void *)x, sizeof(x)*size);
+  memcpy((void *)mxGetPr(matlabY), (void *)y, sizeof(y)*size);
 
-			//engEvalString(ep, "title('Position vs. Time for a falling object');");
-			//engEvalString(ep, "xlabel('Time (seconds)');");
-			//engEvalString(ep, "ylabel('Position (meters)');");
+  engPutVariable(ep, "X", matlabX);
+  engPutVariable(ep, "Y", matlabY);
 
-			mxDestroyArray(matlabX);
-			mxDestroyArray(matlabY);
-		}
+  engEvalString(ep, "plot(X,Y);");
 
-		void draw(const std::vector<double>& data, std::pair<uint64_t, uint64_t> range, std::string colormap)
-		{
-			const uint64_t size = data.size();
-			double *img = new double[size];
+  //engEvalString(ep, "title('Position vs. Time for a falling object');");
+  //engEvalString(ep, "xlabel('Time (seconds)');");
+  //engEvalString(ep, "ylabel('Position (meters)');");
 
-			for (uint64_t i = 0; i < range.first; ++i) {
-				for (uint64_t j = 0; j < range.second; ++j) {
-					img[j + range.second*i] = data[i + range.first*j];
-				}
-			}
+  mxDestroyArray(matlabX);
+  mxDestroyArray(matlabY);
+}
 
-			drawInternal(img, size, range, colormap);
-		}
+void draw(const std::vector<double>& data, std::pair<uint64_t, uint64_t> range, std::string colormap) {
+  const uint64_t size = data.size();
+  double *img = new double[size];
 
-		void draw(const std::vector<uint64_t>& data, std::pair<uint64_t, uint64_t> range, std::string colormap)
-		{
-			const uint64_t size = data.size();
-			double *img = new double[size];
+  for (uint64_t i = 0; i < range.first; ++i) {
+    for (uint64_t j = 0; j < range.second; ++j) {
+      img[j + range.second*i] = data[i + range.first*j];
+    }
+  }
 
-			for (uint64_t i = 0; i < range.first; ++i) {
-				for (uint64_t j = 0; j < range.second; ++j) {
-					img[j + range.second*i] = static_cast<double>(data[i + range.first*j]);
-				}
-			}
+  drawInternal(img, size, range, colormap);
+}
 
-			drawInternal(img, size, range, colormap);
-		}
-	}
+void draw(const std::vector<uint64_t>& data, std::pair<uint64_t, uint64_t> range, std::string colormap) {
+  const uint64_t size = data.size();
+  double *img = new double[size];
+
+  for (uint64_t i = 0; i < range.first; ++i) {
+    for (uint64_t j = 0; j < range.second; ++j) {
+      img[j + range.second*i] = static_cast<double>(data[i + range.first*j]);
+    }
+  }
+
+  drawInternal(img, size, range, colormap);
+}
+
+}
 }

@@ -56,7 +56,7 @@ void State::loadState(std::string fileName)
 	std::ifstream file(fileName + stateExtension);
 
 	if (!file.is_open()) {
-		std::cout << "failed to read to state file\n";
+		std::cout << "failed to read state file\n";
 	}
 
 	const uint64_t bufferSize = 1024;
