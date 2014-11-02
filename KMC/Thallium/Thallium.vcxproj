@@ -164,7 +164,6 @@
     <ClInclude Include="Evolution.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Includes.h" />
-    <ClInclude Include="mtrand.h" />
     <ClInclude Include="Neighborhood.h" />
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="Rates.h" />
@@ -180,7 +179,6 @@
     <ClCompile Include="Events_del.cpp" />
     <ClCompile Include="Evolution.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="mtrand.cpp" />
     <ClCompile Include="Reporter.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="ThalliumMain.cpp" />

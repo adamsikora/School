@@ -28,6 +28,7 @@ void drawInternal(double *img, uint64_t size, std::pair<uint64_t, uint64_t> rang
 
   engEvalString(ep, "imagesc(img);");
   engEvalString(ep, std::string("colormap(" + colormap + ");").c_str());
+  engEvalString(ep, "figure(gcf)");
 
   mxDestroyArray(matlabImg);
 }
@@ -60,6 +61,7 @@ void plot(const std::vector<std::pair<double, double>>& data) {
   engPutVariable(ep, "Y", matlabY);
 
   engEvalString(ep, "plot(X,Y);");
+  engEvalString(ep, "figure(gcf)");
 
   //engEvalString(ep, "title('Position vs. Time for a falling object');");
   //engEvalString(ep, "xlabel('Time (seconds)');");

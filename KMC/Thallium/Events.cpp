@@ -9,15 +9,13 @@ Events::Events(State state)
 	),
 	param(state.getParameters()), m_reporter(state),
 	evolution(para), rates(evolution._rates), grid(state.getLattice()),
-	eventLists(grid._lattice), _nDesorbNeigh(c::nNeighCount, 0)
+  eventLists(grid._lattice), _nDesorbNeigh(c::nNeighCount, 0), _random(para.seed)
 {
 	_nEvents = 0;
 	_nAds = 0; _nDes = 0; _nDiff = 0;
 	_nMetal = _nSilicon = 0;
 
 	_targetCoverage = para.targetCoverage;
-
-	_random.seed(para.seed);
 
 	for (int i = 0; i < c::A; ++i) {
 		switch (grid._lattice[i].getAtom()) {
@@ -76,9 +74,9 @@ Events::Events(State state)
 void Events::adsorbIslands(int nIslands, int islandSize)
 {
 	for (int i = 0; i < nIslands; i++) {
-		int position = static_cast<int> (floor(_random() * c::A));
+		int position = static_cast<int> (_random.getIntFrom0To(c::A));
 		for (int j = 0; j < islandSize; j++) {
-			adsorption(neigh::neigh(n, position), atomType::silicon);
+			adsorption(position, atomType::silicon);
 		}
 	}
 }
@@ -122,7 +120,7 @@ void Events::execute()
 
 newChoose:;
 
-	double chooseEvent = _random() * rates.total;
+	double chooseEvent = _random.get01() * rates.total;
 
 	if (chooseEvent < rates.totalAds) {
 		int index = static_cast<int> (floor(chooseEvent / rates.ads));
@@ -175,7 +173,7 @@ void Events::executeDes()
 {
    evolution._rates.setSums(eventLists._desEvents, eventLists._diffEvents);
 
-	double chooseEvent = _random() * rates.totalDes;
+	double chooseEvent = _random.get01() * rates.totalDes;
 	double cumulateRates = 0;
 	int ei = 0, ej = 0;
 	while (cumulateRates + rates.sumsofDes[ei] < chooseEvent)
@@ -189,7 +187,7 @@ void Events::evolve()
 {
    evolution._rates.setSums(eventLists._desEvents, eventLists._diffEvents);
 
-   double deltaTime = -log(evolution._trandom()) / evolution._rates.total;
+   double deltaTime = -log(_random.get01()) / evolution._rates.total;
 
    /*while (deltaTime > evolution._timeBetweenHeating) {
       evolution.heating(eventLists._desEvents, eventLists._diffEvents);
@@ -197,7 +195,7 @@ void Events::evolve()
       evolution._timeToHeat = evolution._timeBetweenHeating * (1 + static_cast<int>(evolution._masterTime / evolution._timeBetweenHeating));
 
       evolution.theta.deltaCovData.emplace_back(evolution._para.T, _getCoverage(), _nDesorbNeigh, getOtherData(), evolution._masterTime);
-      deltaTime = -log(evolution._trandom()) / evolution._rates.total;
+      deltaTime = -log(_random.get01()) / evolution._rates.total;
    }*/
    evolution._masterTime += deltaTime;
    /*if (evolution._masterTime > evolution._timeToHeat && evolution._para.heatingRate > 0.0) {

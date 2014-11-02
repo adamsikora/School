@@ -23,7 +23,7 @@ basic includes: stl containers, stream manipulation, multithreading, math, time,
 #include <math.h>
 #include <time.h>
 
-#include "mtrand.h"
+#include "RandomUtils.h"
 
 #include "Consts.h"
 #include "Class.h"

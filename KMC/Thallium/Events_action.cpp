@@ -5,7 +5,7 @@ void Events::adsorption(int position, atomType adatom)
    int dest = position;
    if (_getCoverage() < 1.0) {
       while (grid.present(dest) != atomType::nothing) {
-         int smer = static_cast<int> (floor(_random() * 6));
+         int smer = static_cast<int> (_random.getIntFrom0To(6));
          dest = neigh::neigh(smer, dest);
       }
 

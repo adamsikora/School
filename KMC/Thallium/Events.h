@@ -82,7 +82,7 @@ private:
 	//int _adsHeight;
 
 	int _seed;
-	MTRand _random;
+	utils::random::Generator _random;
 
    Results getResults();    // functions for passing simulation output
    //std::vector<double> getOtherData();

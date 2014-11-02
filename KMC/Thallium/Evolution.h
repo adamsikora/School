@@ -10,8 +10,6 @@ defines class for managing time and temperature evolution of the system
 
 #include "Includes.h"
 
-#include "mtrand.h"
-
 //#include "Theta.h"
 #include "Parameters.h"
 #include "Rates.h"
@@ -38,8 +36,6 @@ private:
    Rates _rates;
 
    double _masterTime;
-
-   MTRand_open _trandom;
 
 	ParametersInternal _para;
 
