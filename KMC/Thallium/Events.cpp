@@ -215,8 +215,9 @@ Results Events::getResults()
 	res.set("coverage", _getCoverage());
 	res.set("nAds", _nAds);
 	res.set("nDes", _nDes);
-	res.set("nDiff", _nDiff);
-	res.set("T", evolution._para.T);
+  res.set("nDiff", _nDiff);
+  res.set("T", evolution._para.T);
+  res.set("time", evolution._masterTime);
 	return res;
 }
 

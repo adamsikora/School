@@ -22,7 +22,7 @@ public:
 		for (uint64_t i = 0; i < m_nextGenSize; ++i) {
 			std::bitset<64> next;
 			for (uint64_t j = 0; j < 64; ++j) {
-				if (utils::decide(m_bitProbability[j])) {
+        if (utils::random::decide(m_bitProbability[j])) {
 					next[j] = 1;
 				}
 				else {

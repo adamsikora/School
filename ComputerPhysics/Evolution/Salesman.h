@@ -30,7 +30,7 @@ public:
 		uint64_t size = newValue.size();
 		for (uint64_t i = 0; i < size; ++i) {
 			for (uint64_t j = 0; j < size; ++j) {
-				if (utils::decide(m_mutationRate)) {
+				if (utils::random::decide(m_mutationRate)) {
 					std::swap(newValue[i], newValue[j]);
 				}
 			}

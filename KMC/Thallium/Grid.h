@@ -15,74 +15,71 @@ defines class for managing lattice state
 class Events;
 class EventLists;
 
-class GridCell
-{
+class GridCell {
 public:
-   GridCell() : _atom(0), _vicinity(0) {}
-   inline int getAtom() const { return _atom; };
-   inline void setAtom(int atom) { _atom = atom; };
-   inline int getVicinity() const { return _vicinity; };
-   inline void setVicinity(int nC) { _vicinity = nC; };
-   inline void alterVicinity(int nC) { _vicinity += nC; };
+  GridCell() : _atom(0), _vicinity(0) {}
+  inline int getAtom() const { return _atom; };
+  inline void setAtom(int atom) { _atom = atom; };
+  inline int getVicinity() const { return _vicinity; };
+  inline void setVicinity(int nC) { _vicinity = nC; };
+  inline void alterVicinity(int nC) { _vicinity += nC; };
 
 private:
-   int _atom;
-   int _vicinity;
+  int _atom;
+  int _vicinity;
 };
 
-class Grid
-{
+class Grid {
 public:
-	//Grid(int initialHeight) : _lattice(c::A, GridCell()) {}
-	Grid(const std::vector<uint64_t>& lattice) : _lattice(c::A, GridCell())
-	{
-		for (uint64_t i = 0; i < c::A; ++i) {
-			_lattice[i].setAtom(lattice[i]);
-		}
-		for (uint64_t i = 0; i < c::A; ++i) {
-			_lattice[i].setVicinity(vicinityCount(i));
-		}
-	}
+  //Grid(int initialHeight) : _lattice(c::A, GridCell()) {}
+  Grid(const std::vector<uint64_t>& lattice) : _lattice(c::A, GridCell()) {
+    for (size_t i = 0; i < c::A; ++i) {
+      _lattice[i].setAtom(lattice[i]);
+    }
+    for (size_t i = 0; i < c::A; ++i) {
+      _lattice[i].setVicinity(vicinityCount(i));
+    }
+  }
 
-	friend class Events;
-	friend class EventLists;
+  friend class Events;
+  friend class EventLists;
 
-   void updateLattice(const Change& src, const Change& dest);    // updates lattice state after event
-	std::vector<uint64_t> toVector() {
-		std::vector<uint64_t> result;
-		result.reserve(c::A);
-		for (uint64_t i = 0; i < c::A; ++i) {
-			result.push_back(_lattice[i].getAtom());
-		}
-		return std::move(result);
-	}
+  void updateLattice(const Change& src, const Change& dest);    // updates lattice state after event
+  std::vector<uint64_t> toVector() {
+    std::vector<uint64_t> result;
+    result.reserve(c::A);
+    for (size_t i = 0; i < c::A; ++i) {
+      result.push_back(_lattice[i].getAtom());
+    }
+    return std::move(result);
+  }
 
-	inline int present(int pos) const { return _lattice[pos].getAtom();}
-   // checks whether atom is present at given position
-	
-	inline int vicinityCount(int pos) { // counts neighboring atoms
-      return
-         c::atomBase[_lattice[neigh::n_0(pos)].getAtom()] +
-         c::atomBase[_lattice[neigh::n_1(pos)].getAtom()] +
-         c::atomBase[_lattice[neigh::n_2(pos)].getAtom()] +
-         c::atomBase[_lattice[neigh::n_3(pos)].getAtom()] +
-         c::atomBase[_lattice[neigh::n_4(pos)].getAtom()] +
-         c::atomBase[_lattice[neigh::n_5(pos)].getAtom()];
-	}
+  inline int present(int pos) const { return _lattice[pos].getAtom(); }
+  // checks whether atom is present at given position
 
-	inline int getEdgeType(int src, int direction) {
-		int toRet = 0;
-		if (_lattice[neigh::neigh((direction + 1) % 6, src)].getAtom() != atomType::nothing) {
-			toRet += (direction % 2 == 0) ? 2 : 1;
-		}
-		if (_lattice[neigh::neigh((direction + 5) % 6, src)].getAtom() != atomType::nothing) {
-			toRet += (direction % 2 == 0) ? 1 : 2;
-		}
-		return toRet;
-	}
+  inline int vicinityCount(int pos) { // counts neighboring atoms
+    return
+      c::atomBase[_lattice[neigh::n_0(pos)].getAtom()] +
+      c::atomBase[_lattice[neigh::n_1(pos)].getAtom()] +
+      c::atomBase[_lattice[neigh::n_2(pos)].getAtom()] +
+      c::atomBase[_lattice[neigh::n_3(pos)].getAtom()] +
+      c::atomBase[_lattice[neigh::n_4(pos)].getAtom()] +
+      c::atomBase[_lattice[neigh::n_5(pos)].getAtom()];
+  }
+
+  inline int getEdgeType(int src, int direction) {
+    int toRet = 0;
+    if (_lattice[neigh::neigh((direction + 1) % 6, src)].getAtom() != atomType::nothing) {
+      toRet += (direction % 2 == 0) ? 2 : 1;
+    }
+    if (_lattice[neigh::neigh((direction + 5) % 6, src)].getAtom() != atomType::nothing) {
+      toRet += (direction % 2 == 0) ? 1 : 2;
+    }
+    return toRet;
+  }
 
 private:
-	std::vector<GridCell> _lattice;  // actual lattice represented by 1D vector, helical boundary conditions used
+  std::vector<GridCell> _lattice;  // actual lattice represented by 1D vector, helical boundary conditions used
 
 };
 

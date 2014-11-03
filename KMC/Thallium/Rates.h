@@ -85,20 +85,20 @@ public:
 
 	void setSums(std::vector<S>* desEv, std::vector<SD>* diffEv)
 	{
-		totalDes = totalDiff = total = 0;
+		totalDes = totalDiff = total = 0.0;
 		totalAds = ads*c::w*c::h;
 
-		for (int ci = 0; ci < c::nDesTypes; ci++)
+    for (size_t ci = 0; ci < c::nDesTypes; ci++)
 			if (!desEv[ci].empty())
 				totalDes += sumsofDes[ci] = des[ci] * desEv[ci].size();
 			else
-				sumsofDes[ci] = 0;
+				sumsofDes[ci] = 0.0;
 
-		for (int ci = 0; ci < c::nDiffTypes; ci++)
+    for (size_t ci = 0; ci < c::nDiffTypes; ci++)
 			if (!diffEv[ci].empty())
 				totalDiff += sumsofDiff[ci] = diff[ci] * diffEv[ci].size();
 			else
-				sumsofDiff[ci] = 0;
+				sumsofDiff[ci] = 0.0;
 	
 		total = totalAds + totalDes + totalDiff;
    }

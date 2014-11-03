@@ -26,7 +26,6 @@ enum simulationReturn
 class Events
 {
 public:
-	//Events(Report& report);
 	Events(State state);
 
    //simulationReturn desorptionSimulation();  // runs desorption simulation
@@ -64,16 +63,16 @@ private:
 
    const Rates& rates;
 
-	unsigned __int64 _nEvents;
-   unsigned __int64 _nAds, _nDiff, _nDes;// _nUpDiff, _nDownDiff, _nDes;// , _nFreeDes, _nFreeDiff;    // events counters
-   inline unsigned __int64 _getnActions() const { return _nAds + _nDiff + _nDes; }
-   unsigned __int64 _nMetal, _nSilicon;
+	uint64_t _nEvents;
+  uint64_t _nAds, _nDiff, _nDes;// _nUpDiff, _nDownDiff, _nDes;// , _nFreeDes, _nFreeDiff;    // events counters
+  inline uint64_t _getnActions() const { return _nAds + _nDiff + _nDes; }
+  uint64_t _nMetal, _nSilicon;
 	double _targetCoverage;
 
    std::vector<int> _nDesorbNeigh;
 
 	inline double _getCoverage() {
-      return static_cast<double> (_nMetal + _nSilicon) / c::A;
+      return static_cast<double>(_nMetal + _nSilicon) / c::A;
    }
    //int getnFreeAtoms();
    //int getnBorderAtoms();

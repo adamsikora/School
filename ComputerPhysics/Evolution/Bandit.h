@@ -25,7 +25,7 @@ public:
 	Bandit mutate() const {
 		std::vector<uint64_t> newValue = m_value;
 		for (auto &owner : newValue) {
-			if (utils::decide(m_mutationRate)) {
+      if (utils::random::decide(m_mutationRate)) {
 				//owner = mersenneTwister() % m_nBandits;
 			}
 		}
@@ -34,7 +34,7 @@ public:
 	Bandit reproduce(Bandit mate) const {
 		std::vector<uint64_t> newValue = m_value;
 		for (int i = 0; i < m_value.size(); ++i) {
-			if (utils::decide(0.5)) {
+      if (utils::random::decide(0.5)) {
 				newValue[i] = mate.vectValue()[i];
 			}
 		}
