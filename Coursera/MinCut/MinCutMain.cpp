@@ -32,7 +32,7 @@ int findCut(std::list<std::pair<int, int>> edges) {
       ++jt;
     }
   }
-  return edges.size();
+  return static_cast<int>(edges.size());
 }
 
 int main() {
@@ -66,7 +66,7 @@ int main() {
   std::list<std::pair<int, int>> edges;
   int edgecount = 0;
   for (auto &adj : adjacency) {
-    edgecount += adj.second.size();
+    edgecount += static_cast<int>(adj.second.size());
     for (auto second : adj.second) {
       if (adj.first < second) {
         edges.emplace_back(adj.first, second);
@@ -77,7 +77,7 @@ int main() {
     std::cout << "wrong input\n";
   }
 
-  int best = edges.size();
+  int best = static_cast<int>(edges.size());
   for (int i = 0; i < 200 * 200; ++i) {
     int next = findCut(edges);
     //std::cout << i << " " << next << std::endl;

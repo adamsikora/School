@@ -15,7 +15,7 @@ namespace utils {
 
 class StopWatch {
 public:
-  StopWatch(bool startImmidiately = false)
+  StopWatch(bool startImmidiately = true)
     : startClock(0), stopClock(0), lastElapsed(0), totalElapsed(0) {
     if (startImmidiately) {
       start();
