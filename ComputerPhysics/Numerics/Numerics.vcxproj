@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4166E14C-7988-4383-B447-B8F4433EF284}</ProjectGuid>
-    <RootNamespace>Thallium</RootNamespace>
+    <ProjectGuid>{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}</ProjectGuid>
+    <RootNamespace>Numerics</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,15 +74,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
-      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
-      <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -93,15 +87,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
-      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
-      <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -112,15 +100,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
-      <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,15 +117,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
-      <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -152,35 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Class.h" />
-    <ClInclude Include="Consts.h" />
-    <ClInclude Include="Eventlist.h" />
-    <ClInclude Include="EventListClass.h" />
-    <ClInclude Include="Events.h" />
-    <ClInclude Include="Evolution.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="Includes.h" />
-    <ClInclude Include="Neighborhood.h" />
-    <ClInclude Include="Parameters.h" />
-    <ClInclude Include="Rates.h" />
-    <ClInclude Include="Reporter.h" />
-    <ClInclude Include="State.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Eventlist.cpp" />
-    <ClCompile Include="Events.cpp" />
-    <ClCompile Include="Events_action.cpp" />
-    <ClCompile Include="Events_add.cpp" />
-    <ClCompile Include="Events_check.cpp" />
-    <ClCompile Include="Events_del.cpp" />
-    <ClCompile Include="Evolution.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="Reporter.cpp" />
-    <ClCompile Include="State.cpp" />
-    <ClCompile Include="ThalliumMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="startstate.state" />
+    <ClCompile Include="NumericsMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
