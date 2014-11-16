@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31010.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utils", "Utils\Utils.vcxproj", "{8974CDF1-A223-40E1-A3AE-DBED2DEA85B3}"
 EndProject
@@ -153,8 +153,8 @@ Global
 		{F69A3F9C-F3EC-472C-82E9-9F5400752BF2}.Release|Win32.Build.0 = Release|x64
 		{F69A3F9C-F3EC-472C-82E9-9F5400752BF2}.Release|x64.ActiveCfg = Release|x64
 		{F69A3F9C-F3EC-472C-82E9-9F5400752BF2}.Release|x64.Build.0 = Release|x64
-		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|Mixed Platforms.ActiveCfg = Release|Win32
-		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|Mixed Platforms.Build.0 = Release|Win32
+		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|Mixed Platforms.ActiveCfg = Release|x64
+		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|Mixed Platforms.Build.0 = Release|x64
 		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|Win32.ActiveCfg = Release|Win32
 		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|Win32.Build.0 = Release|Win32
 		{18ADE2C5-42B7-4CA5-9C81-E328AD171A6B}.Debug|x64.ActiveCfg = Release|Win32
@@ -170,12 +170,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7E4D7A34-ED40-48BF-B549-D6F3563BBD78} = {25343FD8-6748-4EDB-B94E-DA192D28A128}
 		{A7AADEE9-D9A6-4B65-ADC2-FA8DA0988988} = {25343FD8-6748-4EDB-B94E-DA192D28A128}
 		{66C31E87-B831-4261-80D3-838F7A4AAD24} = {25343FD8-6748-4EDB-B94E-DA192D28A128}
+		{7E4D7A34-ED40-48BF-B549-D6F3563BBD78} = {25343FD8-6748-4EDB-B94E-DA192D28A128}
 		{F69A3F9C-F3EC-472C-82E9-9F5400752BF2} = {25343FD8-6748-4EDB-B94E-DA192D28A128}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
