@@ -40,7 +40,7 @@ void evaluate(std::string command) {
   engEvalString(ep, command.c_str());
 }
 
-void plot(const std::vector<std::pair<double, double>>& data) {
+void plot(const std::vector<std::pair<double, double>>& data, std::string command = "plot") {
   engineInit();
 
   const uint64_t size = data.size();
@@ -60,8 +60,8 @@ void plot(const std::vector<std::pair<double, double>>& data) {
   engPutVariable(ep, "X", matlabX);
   engPutVariable(ep, "Y", matlabY);
 
-  engEvalString(ep, "plot(X,Y);");
-  //engEvalString(ep, "figure(gcf)");
+  engEvalString(ep, (command + "(X,Y);").c_str());
+  engEvalString(ep, "figure(gcf)");
 
   //engEvalString(ep, "title('Position vs. Time for a falling object');");
   //engEvalString(ep, "xlabel('Time (seconds)');");
