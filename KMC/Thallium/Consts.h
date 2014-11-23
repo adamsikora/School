@@ -33,7 +33,7 @@ namespace c
 
    const double boltzmann = 8.6173324e-5;
 
-	const int w = 64;// 256;                                   // lattice size, should be power of two for faster computation
+	const int w = 128;// 256;                                   // lattice size, should be power of two for faster computation
    const int h = w;
    const int A = w * h;
 

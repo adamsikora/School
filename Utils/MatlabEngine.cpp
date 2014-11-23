@@ -40,7 +40,7 @@ void evaluate(std::string command) {
   engEvalString(ep, command.c_str());
 }
 
-void plot(const std::vector<std::pair<double, double>>& data, std::string command = "plot") {
+void plot(const std::vector<std::pair<double, double>>& data, std::string command) {
   engineInit();
 
   const uint64_t size = data.size();

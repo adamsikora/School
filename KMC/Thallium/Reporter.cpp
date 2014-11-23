@@ -43,29 +43,29 @@ void Reporter::pdbPut(const State& state, std::string name, bool fitToRectangle)
 	double dist = 3.450;
 	int line = 1;
 	double x, y, z, t;
-	//for (int pi = 0; pi < c::h; pi++) {
-	//	for (int pj = 0; pj < c::w; pj++) {
-	//		x = dist*(pj + 0.5*(pi - 1));
-	//		y = -sqrt(3.0) / 2.0*dist*(pi + 1.0 / 3.0*(-1));
-	//		z = sqrt(2.0 / 3.0)*dist*(-1);
-	//		t = 0.1 * 0;
-	//
-	//		if (fitToRectangle) {
-	//			if ((pi + 1) / 2 + pj > c::w - 1) {
-	//				x -= c::w * dist - 0.5 * dist;
-	//				y -= sqrt(3.0) / 2.0 * dist;
-	//			}
-	//		}
-	//		file << "ATOM  "
-	//			<< std::setw(5) << line++ << " Tl   UNK     0    "
-	//			<< std::setw(8) << std::setprecision(3) << x
-	//			<< std::setw(8) << std::setprecision(3) << y
-	//			<< std::setw(8) << std::setprecision(3) << z
-	//			<< std::setw(6) << std::setprecision(2) << 0.0
-	//			<< std::setw(6) << std::setprecision(2) << t
-	//			<< "  0" << "\n";
-	//	}
-	//}
+	for (int pi = 0; pi < c::h; pi++) {
+		for (int pj = 0; pj < c::w; pj++) {
+			x = dist*(pj + 0.5*(pi - 1));
+			y = -sqrt(3.0) / 2.0*dist*(pi + 1.0 / 3.0*(-1));
+			z = sqrt(2.0 / 3.0)*dist*(-1);
+			t = 0.1 * 0;
+	
+			if (fitToRectangle) {
+				if ((pi + 1) / 2 + pj > c::w - 1) {
+					x -= c::w * dist - 0.5 * dist;
+					y -= sqrt(3.0) / 2.0 * dist;
+				}
+			}
+			file << "ATOM  "
+				<< std::setw(5) << line++ << " Tl   UNK     0    "
+				<< std::setw(8) << std::setprecision(3) << x
+				<< std::setw(8) << std::setprecision(3) << y
+				<< std::setw(8) << std::setprecision(3) << z
+				<< std::setw(6) << std::setprecision(2) << 0.0
+				<< std::setw(6) << std::setprecision(2) << t
+				<< "  0" << "\n";
+		}
+	}
 
 	for (int pi = 0; pi < c::h; pi++) {
 		for (int pj = 0; pj < c::w; pj++) {
