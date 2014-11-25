@@ -3,7 +3,7 @@ Simulation Parameters:
 nu = 1e13
 T = 300.0
 
-E_M_M = 0.32
+E_M_M = 0.3
 E_M_Si = 1.0
 E_M_Tl = 1.0
 

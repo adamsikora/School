@@ -6,15 +6,15 @@
 //const double k = 1e-7;
 //const double step = 1e-8;
 
-std::vector<double> mass = { 1.989e30, 5.972e24, 7.348e22 };
-std::vector<std::pair<double, double>> position = { { 0.0, 0.0 }, { 0.0, 147.09e9 }, { 0.0, 147.09e9 + 0.3633e9 } };
-std::vector<std::pair<double, double>> velocity = { { 9.21e-2, 0.0 }, { -30.29e3, 0.0 }, { -(30.29e3 + 1.076e3), 0.0 } };
+std::vector<double> mass = { 1.989e30, 5.972e24, /*7.348e22*/100 };
+std::vector<std::pair<double, double>> position = { { 0.0, 0.0 }, { 0.0, 147.09e9 }, { -3.0e8, 147.09e9/*147.09e9 + 0.3633e9*/ } };
+std::vector<std::pair<double, double>> velocity = { { 9.21e-2, 0.0 }, { -30.29e3, 0.0 }, { -(30.29e3/* + 1.076e3*/), 0.0 } };
 std::pair<double, double> force[3][3];
 
 std::vector<std::pair<double, double>> energies;
 
 const double cappa = 6.67384e-11;
-const double deltat = 1e5;
+const double deltat = 1e0;
 double t = 0.0;
 double year = 3.15569e7;
 
@@ -49,28 +49,49 @@ void move() {
 }
 
 double calculateEnergy() {
-  double result = 0.0;
-  for (int i = 0; i < 3; ++i) {
-    result += 1.0 / 2.0 * mass[i] * sqrt(velocity[i].first*velocity[i].first + velocity[i].second*velocity[i].second);
-  }
-  /*for (int i = 0; i < 2; ++i) {
-    for (int j = i + 1; j < 3; ++j) {
-      std::pair<double, double> r = std::pair<double, double>(position[j].first - position[i].first, position[j].second - position[i].second);
-      double rlength = sqrt(r.first*r.first + r.second*r.second);
-      result -= cappa * mass[i] * mass[j] / rlength;
-    }
-  }*/
-  return result;
+	double result = 0.0;
+	for (int i = 0; i < 3; ++i) {
+		result += 1.0 / 2.0 * mass[i] * (velocity[i].first*velocity[i].first + velocity[i].second*velocity[i].second);
+	}
+	for (int i = 0; i < 2; ++i) {
+		for (int j = i + 1; j < 3; ++j) {
+			std::pair<double, double> r = std::pair<double, double>(position[j].first - position[i].first, position[j].second - position[i].second);
+			double rlength = sqrt(r.first*r.first + r.second*r.second);
+			result -= cappa * mass[i] * mass[j] / rlength;
+		}
+	}
+	return result;
+}
+
+double calculateSateliteEnergy() {
+	double result = 1.0 / 2.0 * mass[2] * (velocity[2].first*velocity[2].first + velocity[2].second*velocity[2].second);
+
+	for (int i = 0; i < 2; ++i) {
+		//for (int j = i + 1; j < 3; ++j) {
+			std::pair<double, double> r = std::pair<double, double>(position[2].first - position[i].first, position[2].second - position[i].second);
+			double rlength = sqrt(r.first*r.first + r.second*r.second);
+			result -= cappa * mass[i] * mass[2] / rlength;
+		//}
+	}
+	return result;
 }
 
 int main() {
+	double startEnergy = calculateEnergy();
   std::vector<std::pair<double, double>> tr;
-  while (t < 10 * year) {
+  int index = 0;
+  while (t < 1 * year) {
     move();
-    energies.emplace_back(t, calculateEnergy());
-    tr.emplace_back(position[0]);
+	if (++index % 10000 == 0) {
+	energies.emplace_back(t, abs(calculateEnergy() - startEnergy) / calculateSateliteEnergy());
+		//tr.emplace_back(position[0]);
+		tr.emplace_back(position[1]);
+		tr.emplace_back(position[2]);
+	}
+	startEnergy = calculateEnergy();
   }
-  utils::matlab::plot(energies);
+  //utils::matlab::plot(tr, "scatter");
+  utils::matlab::plot(energies, "scatter");
   //std::vector<std::pair<double, double>> vec, topl;
   //for (double x = -5; x <= 5; x += 0.1) {
   //  vec.emplace_back(x, sin(x));
