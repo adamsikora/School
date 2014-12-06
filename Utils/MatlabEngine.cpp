@@ -60,7 +60,7 @@ void plot(const std::vector<std::pair<double, double>>& data, std::string comman
   engPutVariable(ep, "X", matlabX);
   engPutVariable(ep, "Y", matlabY);
 
-  engEvalString(ep, (command + "(X,Y);").c_str());
+  engEvalString(ep, (command + "(X,Y,2);").c_str());
   engEvalString(ep, "figure(gcf)");
 
   //engEvalString(ep, "title('Position vs. Time for a falling object');");
