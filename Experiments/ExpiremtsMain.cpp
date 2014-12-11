@@ -1,89 +1,75 @@
 #include "StlBase.h"
 #include "StopWatch.h"
+#include "RandomUtils.h"
 #include "Clipboard.h"
 #include "MatlabEngine.h"
 #include <unordered_set>
 
+const int size = 10;
+const int ntry = 10000;
+
+std::vector<bool> propousti(size*size, false);
+
+bool lij(double prob) {
+	for (int i = 0; i < size*size; ++i) {
+		propousti[i] = utils::random::decide(prob);
+	}
+	std::vector<bool> propRadek(size, false), propPredRadek(size, false), start(size, false);;
+	for (int i = 0; i < size; ++i) {
+		propRadek[i] = propousti[i];
+	}
+	for (int radek = 1; radek < size; ++radek) {
+		propPredRadek = propRadek;
+		propRadek = start;
+		for (int i = 0; i < size; ++i) {
+			propRadek[i] = propPredRadek[i] && propousti[radek*size + i];
+		}
+		for (int i = 0; i < size; ++i) {
+			if (propRadek[i]) {
+				int pos = i + 1;
+				while (pos < size && propousti[radek*size + pos] && propRadek[pos] == false) {
+					propRadek[pos] = true;
+					++pos;
+				}
+				pos = i - 1;
+				while (pos >= 0 && propousti[radek*size + pos] && propRadek[pos] == false) {
+					propRadek[pos] = true;
+					--pos;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < size; ++i) {
+		if (propRadek[i]) {
+			return true;
+		}
+	}
+	return false;
+}
+
 int main() {
-  std::ifstream file("Median.txt", std::ios_base::in);
-  if (!file.good() || !file.is_open()) {
-    std::cout << "badfile\n";
-  }
-  std::vector<int64_t> ints;
-  while (file.good()) {
-    int64_t next;
-    file >> next;
-    ints.push_back(next);
-  }
-  ints.pop_back();
-
-  std::vector<int64_t> sorted;
-  sorted.reserve(ints.size());
-
-  int64_t answ = 0;
-
-  for (auto it : ints) {
-    auto sit = sorted.begin();
-    while (*sit < it && sit != sorted.end()) {
-      ++sit;
-    }
-    sorted.emplace(sit, it);
-    answ += sorted[(sorted.size() - 1) / 2];
-    answ %= 10000;
-  }
-
-  std::stringstream ss;
-  ss << answ;
-
-  std::cout << ss.str() << std::endl;
-  utils::CopyToClipboard(ss.str());
-  std::cin.ignore();
+	utils::StopWatch sw(true);
+	std::vector<std::pair<double, double>> res, results;
+	for (double prob = 0.0; prob <= 1.0; prob += 0.01) {
+		std::cout << prob << std::endl;
+		int success = 0;
+		for (int tries = 0; tries < ntry; ++tries) {
+			if (lij(prob)) {
+				++success;
+			}
+		}
+		res.emplace_back(prob, double(success) / ntry);
+	}
+	//int start = -1, end = size;
+	//while (res[++start].second == 0.0);
+	//while (res[--end].second == 1.0);
+	//for (int i = start; i <= end; ++i) {
+	//	results.emplace_back(res[i]);
+	//}
+	utils::matlab::plot(res);
+	sw.stop();
+	std::cout << sw.getLastElapsed();
+	std::cin.ignore();
 
   return 0;
 }
-
-/*int main() {
-  std::ifstream file("algo1-programming_prob-2sum.txt", std::ios_base::in);
-  if (!file.good() || !file.is_open()) {
-    std::cout << "badfile\n";
-  }
-  std::vector<int64_t> ints;
-  while (file.good()) {
-    int64_t next;
-    file >> next;
-    ints.push_back(next);
-  }
-  ints.pop_back();
-  std::unordered_set<int64_t> hash;
-  hash.reserve(1000000);
-  for (auto it : ints) {
-    hash.insert(it);
-  }
-  int64_t answ = 0, count = 0;
-  std::vector<bool> is(20001, false);
-  for (auto it : hash) {
-    ++count;
-    if (count % 1000 == 0) {
-      std::cout << count << std::endl;
-    }
-    for (int64_t i = -10000; i <= 10000; ++i) {
-      if (2 * it != i && hash.count(i - it)) {
-        is[i+10000] = true;
-      }
-    }
-  }
-  for (auto it : is) {
-    if (it) {
-      ++answ;
-    }
-  }
-
-  std::stringstream ss;
-  ss << answ;
-
-  std::cout << ss.str() << std::endl;
-  utils::CopyToClipboard(ss.str());
-  std::cin.ignore();
-
-  return 0;
-}*/
