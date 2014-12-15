@@ -20,7 +20,7 @@ namespace c
 	const int nLigandTypes = 2;
 
 	const int ligandTypes[nLigandTypes] = { 1, 2 };
-	const double ligandInteractions[nLigandTypes][nLigandTypes] = { { 1.0, -1.0 }, { -1.0, 1.0 } };
+	//const double ligandInteractions[nLigandTypes][nLigandTypes] = { { 1.0, -1.0 }, { -1.0, 1.0 } };
 	const double ligInter11 = 0.0, ligInter12 = 0.25, ligInter22 = 0.0;
 
 	const int boundsSep = 5;

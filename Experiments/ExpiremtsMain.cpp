@@ -3,6 +3,7 @@
 #include "RandomUtils.h"
 #include "Clipboard.h"
 #include "MatlabEngine.h"
+#include "JMol.h"
 #include <unordered_set>
 
 const int size = 10;
@@ -49,7 +50,8 @@ bool lij(double prob) {
 
 int main() {
 	utils::StopWatch sw(true);
-	std::vector<std::pair<double, double>> res, results;
+
+	/*std::vector<std::pair<double, double>> res, results;
 	for (double prob = 0.0; prob <= 1.0; prob += 0.01) {
 		std::cout << prob << std::endl;
 		int success = 0;
@@ -60,13 +62,10 @@ int main() {
 		}
 		res.emplace_back(prob, double(success) / ntry);
 	}
-	//int start = -1, end = size;
-	//while (res[++start].second == 0.0);
-	//while (res[--end].second == 1.0);
-	//for (int i = start; i <= end; ++i) {
-	//	results.emplace_back(res[i]);
-	//}
-	utils::matlab::plot(res);
+	utils::matlab::plot(res);*/
+	
+	utils::loadInJMol("C:/Users/Adam/Documents/Git/School/KMC/Organic/pdbOutputAfterDeposition.txt.pdb");
+
 	sw.stop();
 	std::cout << sw.getLastElapsed();
 	std::cin.ignore();

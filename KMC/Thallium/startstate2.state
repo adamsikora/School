@@ -1,15 +1,15 @@
 Simulation Parameters:
 
 nu = 1e13
-T = 300.0
+T = 50.0
 
-E_M_M = 0.3
+E_M_M = 0.5
 E_M_Si = 1.0
 E_M_Tl = 1.0
 
-E_bM = 0.5
+E_bM = 0.3
 
-E_b100 = 0.3
+E_b100 = 0.5
 E_b111 = 0.9
 
 layersPerSec = 0.0001

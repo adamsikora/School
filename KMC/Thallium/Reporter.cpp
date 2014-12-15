@@ -38,6 +38,8 @@ void Reporter::pdbPut(const State& state, std::string name, bool fitToRectangle)
 
 	const std::vector<uint64_t>& lattice = state.getLattice();
 
+	file << "REMARK jmolscript: color cpk" << std::endl;
+
 	file << std::fixed;
 
 	double dist = 3.450;

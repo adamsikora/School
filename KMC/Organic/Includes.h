@@ -7,12 +7,7 @@
 #include <sstream>
 #include <fstream>
 
-#include <thread>
-#include <atomic>
-#include <mutex>
-
 #include <math.h>
-#include <time.h>
 
 #include "mtrand.h"
 

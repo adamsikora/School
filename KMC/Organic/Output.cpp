@@ -1,6 +1,6 @@
 #include "Output.h"
 
-std::string pdbExtension = ".txt.pdb";
+std::string pdbExtension = ".pdb";
 std::string txtExtension = ".txt";
 
 std::string pdbName = "pdbOutput";
@@ -38,6 +38,7 @@ void Output::pdbput(std::vector<Molecule>& molecules, std::string charakteristic
 	}
 	double dist = 2.50;
 	int line = 1;
+	fout << "REMARK jmolscript: color cpk" << std::endl;
 	for (std::vector<Molecule>::iterator it = molecules.begin(); it != molecules.end(); it++) {
 		Borders bord(-1, *it);
 		for (int i = bord.starty; i < bord.endyp1; i++)

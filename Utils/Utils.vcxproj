@@ -181,6 +181,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Clipboard.h" />
+    <ClInclude Include="JMol.h" />
     <ClInclude Include="MatlabEngine.h" />
     <ClInclude Include="RandomUtils.h" />
     <ClInclude Include="StlBase.h" />
