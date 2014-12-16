@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Class.h" />
+    <ClInclude Include="ClusterCount.h" />
     <ClInclude Include="Consts.h" />
     <ClInclude Include="Eventlist.h" />
     <ClInclude Include="EventListClass.h" />

@@ -12,6 +12,7 @@ int main()
 	State state("startstate2");
 	Events events(state);
 	events.growthSimulation();
+	state.getLattice();
 
 	//std::vector<uint64_t> vec(c::A, 0);
 	//for (int i = -2; i <= 2; ++i) {

@@ -50,6 +50,9 @@
     <ClInclude Include="Consts.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ClusterCount.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Eventlist.cpp">
