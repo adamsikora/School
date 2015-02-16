@@ -4,7 +4,7 @@
 void Events::simulation(double depositionTime, double multiple)
 {
    _depoTime = depositionTime;
-   while (getCoverage() < 0.15) {
+   while (getCoverage() < 0.2) {
       execute();
       if (_nEvents % 1000000 == 0) {
          std::cout << _nEvents / 1000000 << " " << _nAds << " " << _nDiff << std::endl;

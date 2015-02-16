@@ -29,7 +29,7 @@ public:
 	Events(State state);
 
    //simulationReturn desorptionSimulation();  // runs desorption simulation
-   simulationReturn growthSimulation();      // runs growth simulation
+   State growthSimulation();      // runs growth simulation
 
 	void execute();      // chooses simulation event
 	void executeDes();   // chooses desorption event

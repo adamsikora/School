@@ -11,7 +11,7 @@ namespace c
 {
 	const int maxMolecules = 256 * 256 * 256;
 
-	const int w = 256;
+	const int w = 64;
 	const int h = w;
 	const int A = w * h;
 
@@ -21,7 +21,7 @@ namespace c
 
 	const int ligandTypes[nLigandTypes] = { 1, 2 };
 	//const double ligandInteractions[nLigandTypes][nLigandTypes] = { { 1.0, -1.0 }, { -1.0, 1.0 } };
-	const double ligInter11 = 0.0, ligInter12 = 0.25, ligInter22 = 0.0;
+	const double ligInter11 = 0.5, ligInter12 = -0.25, ligInter22 = 0.5;
 
 	const int boundsSep = 5;
 	const int maxBoundCount = boundsSep * boundsSep * boundsSep;
@@ -48,7 +48,7 @@ namespace c
 
 	const double adsRate = 0.000001;
 
-	const double E_b = 0.5;
+	const double E_b = 0.55;
 	const double boltzmann = 8.6173324e-5;
 	const double nu = 1e13;
 	const double T = 300.0;

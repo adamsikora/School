@@ -12,8 +12,9 @@ public:
   void loadState(std::string file);
   void saveState(std::string file);
 
-  Parameters getParameters() const { return parameters; }
-  double getParameter(std::string parameterName) const { return parameters.get(parameterName); }
+	Parameters getParameters() const { return parameters; }
+	double getParameter(std::string parameterName) const { return parameters.get(parameterName); }
+	void setParameter(std::string parameterName, double value) { parameters.set(parameterName, value); }
   double getResult(std::string parameterName) const { return results.get(parameterName); }
   const std::vector<uint64_t>& getLattice() const { return lattice; }
 

@@ -6,15 +6,15 @@
 //const double k = 1e-7;
 //const double step = 1e-8;
 
-std::vector<double> mass = { 1.989e30, 5.972e24, /*7.348e22*/100 };
-std::vector<std::pair<double, double>> position = { { 0.0, 0.0 }, { 0.0, 147.09e9 }, { -3.0e8, 147.09e9/*147.09e9 + 0.3633e9*/ } };
-std::vector<std::pair<double, double>> velocity = { { 9.21e-2, 0.0 }, { -30.29e3, 0.0 }, { -(30.29e3/* + 1.076e3*/), 0.0 } };
+std::vector<double> mass = { 1.989e30, 5.972e24, 7.348e22 };
+std::vector<std::pair<double, double>> position = { { 0.0, 0.0 }, { 0.0, 147.09e9 }, { 0.0, 147.09e9 + 0.3633e9 } };
+std::vector<std::pair<double, double>> velocity = { { 9.21e-2, 0.0 }, { -30.29e3, 0.0 }, { -(30.29e3 + 1.076e3), 0.0 } };
 std::pair<double, double> force[3][3];
 
 std::vector<std::pair<double, double>> energies;
 
 const double cappa = 6.67384e-11;
-const double deltat = 1e0;
+const double deltat = 1e-0;
 double t = 0.0;
 double year = 3.15569e7;
 
@@ -83,14 +83,15 @@ int main() {
   while (t < 1 * year) {
     move();
 	if (++index % 10000 == 0) {
-	energies.emplace_back(t, abs(calculateEnergy() - startEnergy) / calculateSateliteEnergy());
+	energies.emplace_back(t, abs((calculateEnergy() - startEnergy) / calculateSateliteEnergy()));
 		//tr.emplace_back(position[0]);
 		tr.emplace_back(position[1]);
 		tr.emplace_back(position[2]);
 	}
 	startEnergy = calculateEnergy();
   }
-  //utils::matlab::plot(tr, "scatter");
+  utils::matlab::plot(tr, "scatter");
+	std::cin.ignore();
   utils::matlab::plot(energies, "scatter");
   //std::vector<std::pair<double, double>> vec, topl;
   //for (double x = -5; x <= 5; x += 0.1) {

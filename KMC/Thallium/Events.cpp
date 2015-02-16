@@ -81,7 +81,7 @@ void Events::adsorbIslands(int nIslands, int islandSize)
 	}
 }
 
-simulationReturn Events::growthSimulation()
+State Events::growthSimulation()
 {
 	int position = c::A / 2 + c::w / 3;
 	//for (int n = 0; n < 6; n++) {
@@ -111,7 +111,7 @@ simulationReturn Events::growthSimulation()
 	m_reporter.addState(State(param, getResults(), grid.toVector()));
 	crossCheck();
 
-   return simulationReturn::allright;
+	return State(param, getResults(), grid.toVector());
 }
 
 void Events::execute()
