@@ -11,4 +11,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SchedulingAndMst.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Clustering.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
