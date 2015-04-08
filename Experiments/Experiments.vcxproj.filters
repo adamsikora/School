@@ -18,5 +18,8 @@
     <ClInclude Include="Clustering.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Knapsack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

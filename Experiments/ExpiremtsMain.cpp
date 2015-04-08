@@ -8,12 +8,13 @@
 
 #include "SchedulingAndMst.h"
 #include "Clustering.h"
+#include "Knapsack.h"
 
 int main() {
 	utils::StopWatch sw(true);
 
 	std::stringstream ss;
-	ss << cluster2();
+	ss << knapsack();
 	std::cout << ss.str() << std::endl;
 	utils::CopyToClipboard(ss.str());
 
