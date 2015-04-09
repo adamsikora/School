@@ -57,7 +57,7 @@ private:
 
 	Reporter m_reporter;
 
-   Evolution evolution;
+	Evolution evolution;
 	Grid grid;
 	EventLists eventLists;
 
@@ -72,8 +72,8 @@ private:
    std::vector<int> _nDesorbNeigh;
 
 	inline double _getCoverage() {
-      return static_cast<double>(_nMetal + _nSilicon) / c::A;
-   }
+		return static_cast<double>(_nMetal + _nSilicon) / c::A;
+	}
    //int getnFreeAtoms();
    //int getnBorderAtoms();
    //double getEdes();

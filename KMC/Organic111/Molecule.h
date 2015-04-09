@@ -15,7 +15,7 @@ public:
 
 typedef std::shared_ptr<MoleculeType> MoleculeTypePtr;
 
-const MoleculeTypePtr phthalocyanine =
+const MoleculeTypePtr phthalocyanineOld =
 	std::make_shared<MoleculeType>(
 			Position(5, 6),
 			Position(2, 2),
@@ -39,20 +39,59 @@ const MoleculeTypePtr phthalocyanine =
 		Ligand(AtomType::oxygen, Position(1, 3)),
 		Ligand(AtomType::oxygen, Position(2, 3))*/
 			}
-	);
+);
+const MoleculeTypePtr phthalocyanine =
+std::make_shared<MoleculeType>(
+Position(0, 0),
+Position(0, 0),
+std::vector<Ligand>{
+	Ligand(AtomType::oxygen, Position(0, -2)),
+	Ligand(AtomType::oxygen, Position(0, 2)),
+	Ligand(AtomType::oxygen, Position(2, -1)),
+	Ligand(AtomType::oxygen, Position(-2, 1)),
+	Ligand(AtomType::nitrogen, Position(0, -1)),
+	Ligand(AtomType::nitrogen, Position(1, -1)),
+	Ligand(AtomType::nitrogen, Position(1, 0)),
+	Ligand(AtomType::nitrogen, Position(0, 1)),
+	Ligand(AtomType::nitrogen, Position(-1, 1)),
+	Ligand(AtomType::nitrogen, Position(-1, 0)),
+}
+);
 
 class Molecule {
 public:
 	Molecule(Position position, Rotation rotation, /*const */MoleculeTypePtr moleculeType)
 		: position(position), rotation(rotation), moleculeType(moleculeType) {};
 
-	inline int64_t startX() { return - moleculeType->center.x(); }
-	inline int64_t endX()   { return - moleculeType->center.x() + moleculeType->size.x(); }
-	inline int64_t startY() { return - moleculeType->center.y(); }
-	inline int64_t endY()   { return - moleculeType->center.y() + moleculeType->size.y(); }
+	//inline int64_t startX() const { return - moleculeType->center.x(); }
+	//inline int64_t endX()   const { return - moleculeType->center.x() + moleculeType->size.x(); }
+	//inline int64_t startY() const { return - moleculeType->center.y(); }
+	//inline int64_t endY()   const { return - moleculeType->center.y() + moleculeType->size.y(); }
+
+	void setDiffEvent(Diffusion direction, int64_t posinEventList) { _transEvents[static_cast<int64_t>(direction)] = posinEventList; }
+	void setRotEvent(Rotation direction, int64_t posinEventList) { _rotEvents[static_cast<int64_t>(direction)] = posinEventList; }
+	int64_t diffEvent(Diffusion direction) const { return _transEvents[static_cast<int64_t>(direction)]; }
+	int64_t rotEvent(Rotation direction) const { return _rotEvents[static_cast<int64_t>(direction)]; }
 
 	/*const */MoleculeTypePtr moleculeType;
 	Position position;
 	Rotation rotation;
 
+private:
+	int64_t _transEvents[c::nDiffusions];
+	int64_t _rotEvents[c::nRotations];
+};
+
+struct DiffusionEvent {
+	DiffusionEvent(int64_t molecule, Diffusion movement)
+		: molecule(molecule), movement(movement) {};
+	int64_t molecule;
+	Diffusion movement;
+};
+
+struct RotationEvent {
+	RotationEvent(int64_t molecule, Rotation rotation)
+		: molecule(molecule), rotation(rotation) {};
+	int64_t molecule;
+	Rotation rotation;
 };

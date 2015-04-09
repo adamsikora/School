@@ -45,7 +45,6 @@ bool Grid::isMoveFree(int pos, int shift)
 }
 bool Grid::isRotFree(int pos, int rot)
 {
-	int temp = 0;
 	const Borders bord(_molecules[pos], c::rotation[rot]);
 	for (int i = bord.starty; i < bord.endyp1; i++)
 		for (int j = bord.startx; j < bord.endxp1; j++) {
