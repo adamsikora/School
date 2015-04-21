@@ -26,3 +26,6 @@
 
 #include <algorithm>
 #include <math.h>
+
+#undef max
+#undef min

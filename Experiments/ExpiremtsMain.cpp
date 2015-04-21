@@ -9,12 +9,14 @@
 #include "SchedulingAndMst.h"
 #include "Clustering.h"
 #include "Knapsack.h"
+#include "AllPiarsShortestPaths.h"
+#include "Tsp.h"
 
 int main() {
 	utils::StopWatch sw(true);
 
 	std::stringstream ss;
-	ss << knapsack();
+	ss << tsp();
 	std::cout << ss.str() << std::endl;
 	utils::CopyToClipboard(ss.str());
 
