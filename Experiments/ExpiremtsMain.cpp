@@ -23,6 +23,6 @@ int main() {
 	sw.stop();
 	std::cout << sw.getLastElapsed();
 	std::cin.ignore();
-
+ 
   return 0;
 }
