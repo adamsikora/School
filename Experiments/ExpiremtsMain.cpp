@@ -12,7 +12,7 @@
 #include "AllPiarsShortestPaths.h"
 #include "Tsp.h"
 
-int main() {
+int main() { 
 	utils::StopWatch sw(true);
 
 	std::stringstream ss;

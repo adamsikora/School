@@ -8,10 +8,10 @@ hidden_layer_size = 2;
 num_labels = 2;
 
 %% Parameter initialization
-%initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
-%initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
-initial_Theta1 = -1 + 2*rand(input_layer_size, hidden_layer_size + 1);
-initial_Theta2 = -1 + 2*rand(hidden_layer_size, num_labels + 1);
+initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);
+initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
+%initial_Theta1 = -1 + 2*rand(input_layer_size, hidden_layer_size + 1);
+%initial_Theta2 = -1 + 2*rand(hidden_layer_size, num_labels + 1);
 
 % Unroll parameters
 initial_nn_params = [initial_Theta1(:) ; initial_Theta2(:)];
@@ -27,7 +27,7 @@ options = optimset('MaxIter', 10000);
 
 %  You should also try different values of lambda
 lambda = 0;
-
+alfa = 1;
 [J, grad] = nnCostFunction(initial_nn_params, input_layer_size, hidden_layer_size, ...
                    num_labels, X, y, lambda);
 % Create "short hand" for the cost function to be minimized
@@ -38,8 +38,8 @@ costFunction = @(p) nnCostFunction(p, ...
 
 % Now, costFunction is a function that takes in only one argument (the
 % neural network parameters)
-[nn_params, cost] = fmincg(costFunction, initial_nn_params, options);
-
+%[nn_params, cost] = fmincg(costFunction, initial_nn_params, options);
+[nn_params, cost] = gradientDescent(costFunction, initial_nn_params, alfa);
 % Obtain Theta1 and Theta2 back from nn_params
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
