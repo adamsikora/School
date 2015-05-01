@@ -11,6 +11,7 @@
 #include "Knapsack.h"
 #include "AllPiarsShortestPaths.h"
 #include "Tsp.h"
+#include "2sat.h"
 
 int main() { 
 	utils::StopWatch sw(true);

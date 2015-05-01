@@ -27,5 +27,8 @@
     <ClInclude Include="Tsp.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="2sat.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
