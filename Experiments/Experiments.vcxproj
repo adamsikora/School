@@ -139,6 +139,7 @@
     <ClCompile Include="ExpiremtsMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2sat.h" />
     <ClInclude Include="AllPiarsShortestPaths.h" />
     <ClInclude Include="Clustering.h" />
     <ClInclude Include="Knapsack.h" />

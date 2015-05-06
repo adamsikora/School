@@ -11,12 +11,13 @@
 #include "Knapsack.h"
 #include "AllPiarsShortestPaths.h"
 #include "Tsp.h"
+#include "2sat.h"
 
 int main() { 
 	utils::StopWatch sw(true);
 
 	std::stringstream ss;
-	ss << tsp();
+	ss << twosat();
 	std::cout << ss.str() << std::endl;
 	utils::CopyToClipboard(ss.str());
 
