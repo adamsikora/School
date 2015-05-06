@@ -40,6 +40,27 @@ void evaluate(std::string command) {
   engEvalString(ep, command.c_str());
 }
 
+void putVariableToPlot(const std::vector<std::pair<double, double>>& data, std::string xName, std::string yName) {
+	engineInit();
+
+	const uint64_t size = data.size();
+	double *x = new double[size], *y = new double[size];
+
+	for (uint64_t i = 0; i < size; ++i) {
+		x[i] = data[i].first;
+		y[i] = data[i].second;
+	}
+
+	mxArray *matlabX = mxCreateDoubleMatrix(1, size, mxREAL);
+	mxArray *matlabY = mxCreateDoubleMatrix(1, size, mxREAL);
+
+	memcpy((void *)mxGetPr(matlabX), (void *)x, sizeof(x)*size);
+	memcpy((void *)mxGetPr(matlabY), (void *)y, sizeof(y)*size);
+
+	engPutVariable(ep, xName.c_str(), matlabX);
+	engPutVariable(ep, yName.c_str(), matlabY);
+}
+
 void plot(const std::vector<std::pair<double, double>>& data, std::string command) {
   engineInit();
 
@@ -60,7 +81,7 @@ void plot(const std::vector<std::pair<double, double>>& data, std::string comman
   engPutVariable(ep, "X", matlabX);
   engPutVariable(ep, "Y", matlabY);
 	if (command == "scatter") {
-		engEvalString(ep, "scatter(X,Y,1);");
+		engEvalString(ep, "scatter(X,Y,10);");
 	} else {
 		engEvalString(ep, (command + "(X,Y);").c_str());
 	}

@@ -133,10 +133,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DynamicTsp.cpp" />
+    <ClCompile Include="KohonenMapTsp.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DynamicTsp.h" />
+    <ClInclude Include="KohonenMapTsp.h" />
     <ClInclude Include="TspBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

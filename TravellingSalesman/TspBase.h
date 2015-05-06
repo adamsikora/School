@@ -1,7 +1,10 @@
 #pragma once
 
 #include "StlBase.h"
+#include "RandomUtils.h"
+#include "MatlabEngine.h"
 
+typedef std::pair<double, double> Point;
 typedef std::vector<std::pair<double, double>> PointVector;
 
 class TspBase {
