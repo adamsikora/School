@@ -4,11 +4,7 @@
 
 namespace utils {
 
-	uint64_t saveFile(std::string name, std::string content) {
-		std::ofstream file(name);
-		file << content;
-		file.close();
-		return 0;
-	}
+uint64_t saveFile(std::string name, std::string content);
+void loadInJMol(std::string filePath);
 
 }

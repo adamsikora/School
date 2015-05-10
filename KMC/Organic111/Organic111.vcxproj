@@ -144,6 +144,7 @@
     <ClCompile Include="BaseClass.cpp" />
     <ClCompile Include="EventList.cpp" />
     <ClCompile Include="Events.cpp" />
+    <ClCompile Include="Events_check.cpp" />
     <ClCompile Include="Lattice.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

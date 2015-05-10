@@ -40,28 +40,51 @@ const MoleculeTypePtr phthalocyanineOld =
 		Ligand(AtomType::oxygen, Position(2, 3))*/
 			}
 );
+const MoleculeTypePtr phthalocyanineNOld =
+std::make_shared<MoleculeType>(
+Position(0, 0),
+Position(0, 0),
+std::vector<Ligand>{
+	Ligand(AtomType::oxygen, Position(0, -2)),
+		Ligand(AtomType::oxygen, Position(0, 2)),
+		Ligand(AtomType::oxygen, Position(2, -1)),
+		Ligand(AtomType::oxygen, Position(-2, 1)),
+		Ligand(AtomType::nitrogen, Position(0, -1)),
+		Ligand(AtomType::nitrogen, Position(1, -1)),
+		Ligand(AtomType::nitrogen, Position(1, 0)),
+		Ligand(AtomType::nitrogen, Position(0, 1)),
+		Ligand(AtomType::nitrogen, Position(-1, 1)),
+		Ligand(AtomType::nitrogen, Position(-1, 0)),
+}
+
+);
 const MoleculeTypePtr phthalocyanine =
 std::make_shared<MoleculeType>(
 Position(0, 0),
 Position(0, 0),
 std::vector<Ligand>{
 	Ligand(AtomType::oxygen, Position(0, -2)),
-	Ligand(AtomType::oxygen, Position(0, 2)),
-	Ligand(AtomType::oxygen, Position(2, -1)),
-	Ligand(AtomType::oxygen, Position(-2, 1)),
-	Ligand(AtomType::nitrogen, Position(0, -1)),
-	Ligand(AtomType::nitrogen, Position(1, -1)),
-	Ligand(AtomType::nitrogen, Position(1, 0)),
-	Ligand(AtomType::nitrogen, Position(0, 1)),
-	Ligand(AtomType::nitrogen, Position(-1, 1)),
-	Ligand(AtomType::nitrogen, Position(-1, 0)),
+		Ligand(AtomType::oxygen, Position(0, 2)),
+		Ligand(AtomType::oxygen, Position(2, -1)),
+		Ligand(AtomType::oxygen, Position(-2, 1)),
+		Ligand(AtomType::oxygen, Position(-1, -1)),
+		Ligand(AtomType::oxygen, Position(1, 1)),
+		Ligand(AtomType::oxygen, Position(2, -2)),
+		Ligand(AtomType::oxygen, Position(-2, 2)),
+		Ligand(AtomType::nitrogen, Position(0, -1)),
+		Ligand(AtomType::nitrogen, Position(1, -1)),
+		Ligand(AtomType::nitrogen, Position(1, 0)),
+		Ligand(AtomType::nitrogen, Position(0, 1)),
+		Ligand(AtomType::nitrogen, Position(-1, 1)),
+		Ligand(AtomType::nitrogen, Position(-1, 0)),
 }
 );
 
 class Molecule {
 public:
 	Molecule(Position position, Rotation rotation, /*const */MoleculeTypePtr moleculeType)
-		: position(position), rotation(rotation), moleculeType(moleculeType) {};
+		: position(position), rotation(rotation), moleculeType(moleculeType), _bounds(0),
+		_transEvents(c::defaultDiffusions), _rotEvents(c::defaultRotations) {};
 
 	//inline int64_t startX() const { return - moleculeType->center.x(); }
 	//inline int64_t endX()   const { return - moleculeType->center.x() + moleculeType->size.x(); }
@@ -72,14 +95,17 @@ public:
 	void setRotEvent(Rotation direction, int64_t posinEventList) { _rotEvents[static_cast<int64_t>(direction)] = posinEventList; }
 	int64_t diffEvent(Diffusion direction) const { return _transEvents[static_cast<int64_t>(direction)]; }
 	int64_t rotEvent(Rotation direction) const { return _rotEvents[static_cast<int64_t>(direction)]; }
+	void setBounds(int64_t bounds) { _bounds = bounds; }
+	int64_t bounds() const { return _bounds; }
 
 	/*const */MoleculeTypePtr moleculeType;
 	Position position;
 	Rotation rotation;
 
 private:
-	int64_t _transEvents[c::nDiffusions];
-	int64_t _rotEvents[c::nRotations];
+	int64_t _bounds;
+	std::array<int64_t, c::nDiffusions> _transEvents;
+	std::array<int64_t, c::nRotations> _rotEvents;
 };
 
 struct DiffusionEvent {

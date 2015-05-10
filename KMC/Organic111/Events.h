@@ -10,6 +10,12 @@ class Events {
 	struct Properties {
 		int64_t nEvents, nAds, nDiff, nRot;
 		double time;
+		std::string show() {
+			std::stringstream ss;
+			ss << nEvents << "\t" << nAds << "\t" << nDiff << "\t" << nRot << "\t" << time << "\n";
+			return ss.str();
+		}
+		std::string showHead() { return "events\tads\tdiff\trot\ttime\n"; }
 	};
 public:
 	Events() : lattice(), rates(), eventLists(lattice.moleculeVector()), _random(c::seed) {};
@@ -20,7 +26,7 @@ private:
 	void execute();
 	void alterEvents(int64_t posinMolList);
 
-	void crossCheck();
+	int64_t crossCheck(bool correctResultsReporting = false);
 
 	Lattice lattice;
 	Rates rates;
