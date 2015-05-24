@@ -61,6 +61,7 @@ for i = 1:iterations
    end
    cost(i, tr) = 1/numIn * sum((output-out).^2);
 end
+out
 %fprintf('\nTraining: %f\n', tr);out
 end
 %plot(cost);

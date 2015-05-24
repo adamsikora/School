@@ -9,14 +9,20 @@ namespace {
 
 }
 
+void KohonenMapTsp::plotInMatlab() {
+#ifndef REPORT
+	utils::matlab::putVariableToPlot(_points, "X", "Y");
+	utils::matlab::putVariableToPlot(_kohonenPoints, "Xk", "Yk");
+	utils::matlab::evaluate("plot(X, Y, 'o', Xk, Yk, ':rx')");
+#endif
+}
+
 double KohonenMapTsp::findShortestPath() {
-	utils::random::Generator gen(1);
+	utils::random::Generator gen(_seed);
 	int64_t count = 0;
 	while (_sigma > 0.2) {
 		if (count++ % 1000 == 0) {
-			utils::matlab::putVariableToPlot(_points, "X", "Y");
-			utils::matlab::putVariableToPlot(_kohonenPoints, "Xk", "Yk");
-			utils::matlab::evaluate("plot(X, Y, 'o', Xk, Yk, ':rx')");
+			plotInMatlab();
 		}
 
 		const int64_t city = gen.getIntFrom0To(_nPoints);
@@ -65,15 +71,13 @@ double KohonenMapTsp::findShortestPath() {
 		}
 		result += pointDistance(_points[iter->second], _points[iter2->second]);
 	}
-	utils::matlab::putVariableToPlot(_points, "X", "Y");
-	utils::matlab::putVariableToPlot(_kohonenPoints, "Xk", "Yk");
-	utils::matlab::evaluate("plot(X, Y, 'o', Xk, Yk, ':rx')");
+	plotInMatlab();
 
 	return result;
 }
 
 void KohonenMapTsp::init() {
-	_nKohonenPoints = 4 * _nPoints;
+	_nKohonenPoints = 2 * _nPoints;
 	Point middle = Point(0, 0);
 	for (auto &p : _points) {
 		middle.first += p.first;
@@ -93,11 +97,9 @@ void KohonenMapTsp::init() {
 																middle.second + distance * sin(2 * 3.1415 * i / _nKohonenPoints));
 	}
 	
-	_nu = 1.0;
-	_sigma = 20.0;
+	_nu = 2.0;
+	_sigma = 10.0;
 	_factor = 0.999995;
 
-	utils::matlab::putVariableToPlot(_points, "X", "Y");
-	utils::matlab::putVariableToPlot(_kohonenPoints, "Xk", "Yk");
-	utils::matlab::evaluate("plot(X, Y, 'o', Xk, Yk, ':rx')");
+	plotInMatlab();
 }
