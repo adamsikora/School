@@ -1,9 +1,26 @@
+
+#include "FileUtils.h"
+
 #include "Events.h"
 
 void Events::simulation() {
+	bool hasError = false;
 	while (properties.time < c::finalTime) {
 		execute();
+		if (crossCheck()) {
+			hasError = true;
+		}
 	}
+	crossCheck(true);
+	std::cout << properties.showHead();
+	std::cout << properties.show();
+	if (hasError) {
+		std::cout << "Error encountered through simulation" << std::endl;
+	} else {
+		std::cout << "OK" << std::endl;
+	}
+	utils::saveFile("test.pdb", lattice.gridToPdb());
+	utils::loadInJMol("test.pdb");
 }
 
 void Events::execute() {
@@ -55,6 +72,33 @@ void Events::alterEvents(int64_t posinMolList) {
 	std::set<int64_t> toAlter = lattice.getSetToAlter(posinMolList);
 
 	for (std::set<int64_t>::iterator it = toAlter.begin(); it != toAlter.end(); it++) {
+		Molecule& molecule = lattice.moleculeVector()[*it];
+		int64_t oldBounds = molecule.bounds();
+		int64_t newBounds = lattice.recalculateBounds(*it);
+
+		for (int64_t direction = 0; direction < c::nDiffusions; ++direction) {
+			if (molecule.diffEvent(Diffusion(direction)) != c::empty) {
+				eventLists.properDiffEventReplace(*it, Diffusion(direction), oldBounds);
+			}
+		}
+		for (int64_t rotation = 0; rotation < c::nRotations; ++rotation) {
+			if (molecule.rotEvent(Rotation(rotation)) != c::empty) {
+				eventLists.properRotEventReplace(*it, Rotation(rotation), oldBounds);
+			}
+		}
+
+		for (int64_t direction = 0; direction < c::nDiffusions; ++direction) {
+			assert(molecule.diffEvent(Diffusion(direction)) == c::empty);
+			if (lattice.isFree(*it, diffusionResolver[direction], molecule.rotation)) {
+				eventLists.properDiffEventAddition(*it, Diffusion(direction), newBounds);
+			}
+		}
+		for (int64_t rotation = 0; rotation < c::nRotations; ++rotation) {
+			assert(molecule.rotEvent(Rotation(rotation)) == c::empty);
+			if (lattice.isFree(*it, Position(0, 0), Rotation(rotation))) {
+				eventLists.properRotEventAddition(*it, Rotation(rotation), newBounds);
+			}
+		}
 
 		/*int oldBounds = lattice._molecules[*it].getBounds();
 		lattice.boundCount(lattice._molecules[*it]);

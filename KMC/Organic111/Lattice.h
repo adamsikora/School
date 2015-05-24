@@ -8,7 +8,7 @@ inline std::string getAtomType(AtomType atomType) {
 	switch (atomType) {
 	case AtomType::bulk: return " Ag";
 	case AtomType::oxygen: return " O ";
-	case AtomType::nitrogen: return " N ";
+	case AtomType::nitrogen: return " U ";
 	default: assert(!"Shold never get here"); return "";
 	}
 }
@@ -26,6 +26,8 @@ struct GridCell {
 	AtomType atomType;
 };
 
+class Events;
+
 class Lattice {
 public:
 	Lattice() : _grid(c::A, GridCell()) {};
@@ -40,8 +42,11 @@ public:
 	int64_t occupiedCount(const Molecule& mol) const;
 	bool molDescent(Molecule& mol) const;
 	std::set<int64_t> getSetToAlter(int64_t pos) const;
+	int64_t recalculateBounds(int64_t pos);
 
 	std::string gridToPdb() const;
+
+	friend class Events;
 
 private:
 	inline int64_t to1D(int64_t x, int64_t y) const {

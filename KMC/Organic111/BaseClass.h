@@ -7,6 +7,9 @@ enum class Rotation {
 	zero = 0, pithird = 1, twopithird = 2,
 };
 
+Rotation operator+(const Rotation& lhs, const Rotation& rhs);
+Rotation operator-(const Rotation& lhs, const Rotation& rhs);
+
 class Position {
 public:
 	Position() : _x(0), _y(0) {};
@@ -21,6 +24,10 @@ public:
 		if (rot == Rotation::zero) return Position(this->_x, this->_y);
 		if (rot == Rotation::pithird) return Position(this->_y, - this->_x - this->_y);
 		if (rot == Rotation::twopithird) return Position(- this->_y - this->_x, this->_x);
+		else {
+			assert(!"should never get here");
+			return Position(this->_x, this->_y);
+		}
 	}
 
 private:

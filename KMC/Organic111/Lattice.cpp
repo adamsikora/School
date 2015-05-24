@@ -1,101 +1,46 @@
 #include "Lattice.h"
 
 void Lattice::printMolecule(const Molecule& molecule, int64_t index) {
-	for (auto ligand : molecule.moleculeType->ligands) {
+	for (auto &ligand : molecule.moleculeType->ligands) {
 		_grid[to1D(molecule.position + ligand.position.rotate(molecule.rotation))].setCell(index, ligand.type);
 	}
-	_grid[to1D(molecule.position.x(), molecule.position.y())].atomType = AtomType::bulk;
+	_grid[to1D(molecule.position.x(), molecule.position.y())].setCell(index, AtomType::bulk);
 }
 
 void Lattice::dePrintMolecule(const Molecule& molecule) {
-	//if (molecule.rotation == Rotation::zero) {
-	//	for (int64_t x = molecule.startX(); x < molecule.endX(); ++x) {
-	//		for (int64_t y = molecule.startY(); y < molecule.endY(); ++y) {
-	//			_grid[to1D(molecule.position.x() + x - ((y + 6) / 2 - 3), molecule.position.y() + y)].setEmpty();
-	//		}
-	//	}
-	//} else if (molecule.rotation == Rotation::pithird) {
-	//	for (int64_t x = molecule.startX(); x < molecule.endX(); ++x) {
-	//		for (int64_t y = molecule.startY(); y < molecule.endY(); ++y) {
-	//			_grid[to1D(molecule.position.x() + y, molecule.position.y() - x + ((y + 6) / 2 - 3) - y)].setEmpty();
-	//		}
-	//	}
-	//} else if (molecule.rotation == Rotation::twopithird) {
-	//	for (int64_t x = molecule.startX(); x < molecule.endX(); ++x) {
-	//		for (int64_t y = molecule.startY(); y < molecule.endY(); ++y) {
-	//			_grid[to1D(molecule.position.x() - y - x + ((y + 6) / 2 - 3), molecule.position.y() + x - ((y + 6) / 2 - 3))].setEmpty();
-	//		}
-	//	}
-	//} else {
-	//	assert(!"invalid rotation");
-	//}
+	for (auto &ligand : molecule.moleculeType->ligands) {
+		_grid[to1D(molecule.position + ligand.position.rotate(molecule.rotation))].setEmpty();
+	}
+	_grid[to1D(molecule.position.x(), molecule.position.y())].setEmpty();
 }
 
 bool Lattice::isFree(int64_t moleculePos, Position shift, Rotation rotation) const {
-	//const Molecule& molecule = _molecules[moleculePos];
-	//if (rotation == Rotation::zero) {
-	//	for (int64_t x = molecule.startX() + shift.x(); x < molecule.endX() + shift.x(); ++x) {
-	//		for (int64_t y = molecule.startY() + shift.y(); y < molecule.endY() + shift.y(); ++y) {
-	//			if (_grid[to1D(molecule.position.x() + x - ((y + 6) / 2 - 3), molecule.position.y() + y)].differentMolecule(moleculePos)) {
-	//				return false;
-	//			}
-	//		}
-	//	}
-	//} else if (rotation == Rotation::pithird) {
-	//	for (int64_t x = molecule.startX() + shift.x(); x < molecule.endX() + shift.x(); ++x) {
-	//		for (int64_t y = molecule.startY() + shift.y(); y < molecule.endY() + shift.y(); ++y) {
-	//			if (_grid[to1D(molecule.position.x() + y, molecule.position.y() - x + ((y + 6) / 2 - 3) - y)].differentMolecule(moleculePos)) {
-	//				return false;
-	//			}
-	//		}
-	//	}
-	//} else if (rotation == Rotation::twopithird) {
-	//	for (int64_t x = molecule.startX() + shift.x(); x < molecule.endX() + shift.x(); ++x) {
-	//		for (int64_t y = molecule.startY() + shift.y(); y < molecule.endY() + shift.y(); ++y) {
-	//			if (_grid[to1D(molecule.position.x() - y - x + ((y + 6) / 2 - 3), molecule.position.y() + x - ((y + 6) / 2 - 3))].differentMolecule(moleculePos)) {
-	//				return false;
-	//			}
-	//		}
-	//	}
-	//} else {
-	//	assert(!"invalid rotation");
-	//}
+	const Molecule& molecule = _molecules[moleculePos];
+	for (auto &ligand : molecule.moleculeType->ligands) {
+		if (_grid[to1D(molecule.position + shift + ligand.position.rotate(rotation))].differentMolecule(moleculePos)) {
+			return false;
+		}
+	}
+	if (_grid[to1D(molecule.position + shift)].differentMolecule(moleculePos)) {
+		return false;
+	}
 	return true;
 }
 
 int64_t Lattice::occupiedCount(const Molecule& molecule) const {
 	int64_t result = 0;
-	//if (molecule.rotation == Rotation::zero) {
-	//	for (int64_t x = molecule.startX(); x < molecule.endX(); ++x) {
-	//		for (int64_t y = molecule.startY(); y < molecule.endY(); ++y) {
-	//			if (_grid[to1D(molecule.position.x() + x - ((y + 6) / 2 - 3), molecule.position.y() + y)].molecule != c::empty) {
-	//				++result;
-	//			}
-	//		}
-	//	}
-	//} else if (molecule.rotation == Rotation::pithird) {
-	//	for (int64_t x = molecule.startX(); x < molecule.endX(); ++x) {
-	//		for (int64_t y = molecule.startY(); y < molecule.endY(); ++y) {
-	//			if (_grid[to1D(molecule.position.x() + y, molecule.position.y() - x + ((y + 6) / 2 - 3) - y)].molecule != c::empty) {
-	//				++result;
-	//			}
-	//		}
-	//	}
-	//} else if (molecule.rotation == Rotation::twopithird) {
-	//	for (int64_t x = molecule.startX(); x < molecule.endX(); ++x) {
-	//		for (int64_t y = molecule.startY(); y < molecule.endY(); ++y) {
-	//			if (_grid[to1D(molecule.position.x() - y - x + ((y + 6) / 2 - 3), molecule.position.y() + x - ((y + 6) / 2 - 3))].molecule != c::empty) {
-	//				++result;
-	//			}
-	//		}
-	//	}
-	//} else {
-	//	assert(!"invalid rotation");
-	//}
-	return true;
+	for (auto &ligand : molecule.moleculeType->ligands) {
+		if (_grid[to1D(molecule.position + ligand.position.rotate(molecule.rotation))].differentMolecule(c::empty)) {
+			++result;
+		}
+	}
+	if (_grid[to1D(molecule.position)].differentMolecule(c::empty)) {
+		++result;
+	}
+	return result;
 }
 
-bool Lattice::molDescent(Molecule& mol) const {
+bool Lattice::molDescent(Molecule& mol) const { // fucked up
 	if (occupiedCount(mol) == 0)
 		return true;
 
@@ -120,7 +65,7 @@ bool Lattice::molDescent(Molecule& mol) const {
 
 		int64_t min = nOccupiedSpace;
 		int64_t minpos = -1;
-		for (int i = 0; i < c::nDiffusions + c::nRotations; i++)
+		for (int i = 0; i < c::nDiffusions + c::nRotations; i++) // cunarnicka ale spravne
 			if (nNewOccupiedSpace[i] < min) {
 				min = nNewOccupiedSpace[i];
 				minpos = i;
@@ -128,7 +73,7 @@ bool Lattice::molDescent(Molecule& mol) const {
 		if (minpos < c::nDiffusions)
 			mol.position.move(diffusionResolver[minpos]);
 		else
-			mol.rotation = static_cast<Rotation>(minpos - c::nDiffusions);
+			mol.rotation = static_cast<Rotation>(minpos - c::nDiffusions); // cunarnicka ale spravne
 
 		if (min == nOccupiedSpace)
 			return false;
@@ -140,43 +85,46 @@ bool Lattice::molDescent(Molecule& mol) const {
 std::set<int64_t> Lattice::getSetToAlter(int64_t moleculePos) const {
 	std::set<int64_t> result;
 	const Molecule& molecule = _molecules[moleculePos];
-	const int64_t margin = 3;
-	//if (molecule.rotation == Rotation::zero) {
-	//	for (int64_t x = molecule.startX() - margin; x < molecule.endX() + margin; ++x) {
-	//		for (int64_t y = molecule.startY() - margin; y < molecule.endY() + margin; ++y) {
-	//			if (_grid[to1D(molecule.position.x() + x - ((y + 6) / 2 - 3), molecule.position.y() + y)].differentMolecule(moleculePos)) {
-	//				result.insert(_grid[to1D(molecule.position.x() + x - ((y + 6) / 2 - 3), molecule.position.y() + y)].molecule);
-	//			}
-	//		}
-	//	}
-	//} else if (molecule.rotation == Rotation::pithird) {
-	//	for (int64_t x = molecule.startX() - margin; x < molecule.endX() + margin; ++x) {
-	//		for (int64_t y = molecule.startY() - margin; y < molecule.endY() + margin; ++y) {
-	//			if (_grid[to1D(molecule.position.x() + y, molecule.position.y() - x + ((y + 6) / 2 - 3) - y)].differentMolecule(moleculePos)) {
-	//				result.insert(_grid[to1D(molecule.position.x() + y, molecule.position.y() - x + ((y + 6) / 2 - 3) - y)].molecule);
-	//			}
-	//		}
-	//	}
-	//} else if (molecule.rotation == Rotation::twopithird) {
-	//	for (int64_t x = molecule.startX() - margin; x < molecule.endX() + margin; ++x) {
-	//		for (int64_t y = molecule.startY() - margin; y < molecule.endY() + margin; ++y) {
-	//			if (_grid[to1D(molecule.position.x() - y - x + ((y + 6) / 2 - 3), molecule.position.y() + x - ((y + 6) / 2 - 3))].differentMolecule(moleculePos)) {
-	//				result.insert(_grid[to1D(molecule.position.x() - y - x + ((y + 6) / 2 - 3), molecule.position.y() + x - ((y + 6) / 2 - 3))].molecule);
-	//			}
-	//		}
-	//	}
-	//} else {
-	//	assert(!"invalid rotation");
-	//}
+	const int64_t margin = 5;
+	for (int64_t x = -margin; x <= margin; ++x) {
+		for (int64_t y = -margin; y <= margin; ++y) {
+			int64_t moleculeNumber = _grid[to1D(molecule.position.x() + x, molecule.position.y() + y)].molecule;
+			if (moleculeNumber != moleculePos && moleculeNumber != c::empty) {
+				result.insert(moleculeNumber);
+			}
+		}
+	}
 	result.insert(moleculePos);
 
+	return std::move(result);
+}
+
+int64_t Lattice::recalculateBounds(int64_t moleculePos) {
+	Molecule& molecule = _molecules[moleculePos];
+	int64_t N_N = 0, N_O = 0, O_O = 0;
+	for (auto &ligand : molecule.moleculeType->ligands) {
+		for (const Position &displacement : diffusionResolver) {
+			size_t index = to1D(molecule.position + ligand.position.rotate(molecule.rotation) + displacement);
+			if (_grid[index].differentMolecule(moleculePos)) {
+				if (ligand.type == AtomType::nitrogen) {
+					if (_grid[index].atomType == AtomType::nitrogen) { ++N_N; }
+					if (_grid[index].atomType == AtomType::oxygen) { ++N_O; }
+				} else if (ligand.type == AtomType::oxygen) {
+					if (_grid[index].atomType == AtomType::nitrogen) { ++N_O; }
+					if (_grid[index].atomType == AtomType::oxygen) { ++O_O; }
+				}
+			}
+		}
+	}
+	int64_t result = c::getBoundCount(N_N, N_O, O_O);
+	molecule.setBounds(result);
 	return result;
 }
 
 int64_t Lattice::addMolecule(Molecule molecule) {
 	_molecules.push_back(molecule);
-	printMolecule(molecule, _molecules.size());
-	return _molecules.size();
+	printMolecule(molecule, _molecules.size() - 1);
+	return _molecules.size() - 1;
 }
 
 int64_t Lattice::moveMolecule(DiffusionEvent de) {

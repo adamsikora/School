@@ -6,7 +6,7 @@ Adam Sikora
 
 #include "Events.h"
 #include "StopWatch.h"
-#include "JMol.h"
+#include "FileUtils.h"
 
 class posit {
 public:

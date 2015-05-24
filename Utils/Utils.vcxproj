@@ -182,13 +182,13 @@
   <ItemGroup>
     <ClInclude Include="Clipboard.h" />
     <ClInclude Include="FileUtils.h" />
-    <ClInclude Include="JMol.h" />
     <ClInclude Include="MatlabEngine.h" />
     <ClInclude Include="RandomUtils.h" />
     <ClInclude Include="StlBase.h" />
     <ClInclude Include="StopWatch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="MatlabEngine.cpp" />
     <ClCompile Include="RandomUtils.cpp" />
   </ItemGroup>
