@@ -7,6 +7,7 @@
 
 #include "DynamicTsp.h"
 #include "KohonenMapTsp.h"
+#include "SimulatedAnnealingTsp.h"
 
 #define REPORT
 
@@ -23,18 +24,21 @@ int main() {
 	utils::StopWatch sw(true);
 
 	DynamicTsp dynSalesman(data);
-
 	//std::cout << "Shortest path is: " << dynSalesman.findShortestPath() << std::endl;
 	sw.stop();
 	std::cout << sw.getLastElapsed() << std::endl;
 
-	for (int64_t i = 0; i < 10; ++i) {
-		sw.start();
-		KohonenMapTsp kohonenSalesman(data, i);
-		std::cout << "Shortest kohonen path is: " << kohonenSalesman.findShortestPath() << std::endl;
-		sw.stop();
-		std::cout << sw.getLastElapsed() << std::endl;
-	}
+	sw.start();
+	KohonenMapTsp kohonenSalesman(data, 1);
+	std::cout << "Shortest kohonen path is: " << kohonenSalesman.findShortestPath() << std::endl;
+	sw.stop();
+	std::cout << sw.getLastElapsed() << std::endl;
+
+	sw.start();
+	SimulatedAnnealingTsp annealingSalesman(data, 1);
+	std::cout << "Shortest simulated annealing path is: " << annealingSalesman.findShortestPath() << std::endl;
+	sw.stop();
+	std::cout << sw.getLastElapsed() << std::endl;
 	//utils::CopyToClipboard(ss.str());
 	std::cin.ignore();
 

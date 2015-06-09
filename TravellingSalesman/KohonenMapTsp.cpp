@@ -2,15 +2,8 @@
 
 #include "KohonenMapTsp.h"
 
-namespace {
-	double pointDistance(Point f, Point s) {
-		return sqrt(pow(f.first - s.first, 2) + pow(f.second - s.second, 2));
-	}
-
-}
-
 void KohonenMapTsp::plotInMatlab() {
-#ifndef REPORT
+#ifdef SHOW_OUTPUT
 	utils::matlab::putVariableToPlot(_points, "X", "Y");
 	utils::matlab::putVariableToPlot(_kohonenPoints, "Xk", "Yk");
 	utils::matlab::evaluate("plot(X, Y, 'o', Xk, Yk, ':rx')");

@@ -17,7 +17,9 @@ double DynamicTsp::findShortestPath() {
 
 	float result = std::numeric_limits<float>::max();
 	for (int64_t m = 2; m < _nPoints; ++m) {
+#ifdef SHOW_OUTPUT
 		std::cout << m << std::endl;
+#endif
 		_iterate(m, m, 0, 0);
 	}
 

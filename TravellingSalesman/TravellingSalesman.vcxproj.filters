@@ -24,6 +24,9 @@
     <ClCompile Include="KohonenMapTsp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SimulatedAnnealingTsp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TspBase.h">
@@ -33,6 +36,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="KohonenMapTsp.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimulatedAnnealingTsp.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
