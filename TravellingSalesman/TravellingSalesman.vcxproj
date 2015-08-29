@@ -132,12 +132,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AntColonyTsp.cpp" />
     <ClCompile Include="DynamicTsp.cpp" />
     <ClCompile Include="KohonenMapTsp.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SimulatedAnnealingTsp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AntColonyTsp.h" />
     <ClInclude Include="DynamicTsp.h" />
     <ClInclude Include="KohonenMapTsp.h" />
     <ClInclude Include="SimulatedAnnealingTsp.h" />

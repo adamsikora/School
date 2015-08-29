@@ -8,10 +8,11 @@
 #include "DynamicTsp.h"
 #include "KohonenMapTsp.h"
 #include "SimulatedAnnealingTsp.h"
+#include "AntColonyTsp.h"
 
 #define REPORT
 
-const int64_t totalVertices = 100;
+const int64_t totalVertices = 20;
 
 int main() {
 	utils::matlab::DataVector data;
@@ -30,13 +31,19 @@ int main() {
 
 	sw.start();
 	KohonenMapTsp kohonenSalesman(data, 1);
-	std::cout << "Shortest kohonen path is: " << kohonenSalesman.findShortestPath() << std::endl;
+	//std::cout << "Shortest kohonen path is: " << kohonenSalesman.findShortestPath() << std::endl;
 	sw.stop();
 	std::cout << sw.getLastElapsed() << std::endl;
 
 	sw.start();
 	SimulatedAnnealingTsp annealingSalesman(data, 1);
-	std::cout << "Shortest simulated annealing path is: " << annealingSalesman.findShortestPath() << std::endl;
+	//std::cout << "Shortest simulated annealing path is: " << annealingSalesman.findShortestPath() << std::endl;
+	sw.stop();
+	std::cout << sw.getLastElapsed() << std::endl;
+
+	sw.start();
+	AntColonyTsp antSalesman(data, 1);
+	std::cout << "Shortest ant colony path is: " << antSalesman.findShortestPath() << std::endl;
 	sw.stop();
 	std::cout << sw.getLastElapsed() << std::endl;
 	//utils::CopyToClipboard(ss.str());
