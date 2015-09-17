@@ -1,14 +1,6 @@
 #pragma once
 
-#include "StlBase.h"
 #include "Constants.h"
-
-enum class Rotation {
-	zero = 0, pithird = 1, twopithird = 2,
-};
-
-Rotation operator+(const Rotation& lhs, const Rotation& rhs);
-Rotation operator-(const Rotation& lhs, const Rotation& rhs);
 
 class Position {
 public:
@@ -19,14 +11,12 @@ public:
 	int64_t y() const { return _y; }
 	void move(Position pos) { _x += pos.x(); _y += pos.y(); }
 	int64_t area() const { return _x * _y; }
-
-	const Position rotate(Rotation rot) const {
-		if (rot == Rotation::zero) return Position(this->_x, this->_y);
-		if (rot == Rotation::pithird) return Position(this->_y, - this->_x - this->_y);
-		if (rot == Rotation::twopithird) return Position(- this->_y - this->_x, this->_x);
-		else {
-			assert(!"should never get here");
-			return Position(this->_x, this->_y);
+	void normalize() {
+		if (_x < 0 || _x >= c::w) {
+			_x = (_x + c::w) % c::w;
+		}
+		if (_y < 0 || _y >= c::h) {
+			_y = (_y + c::h) % c::h;
 		}
 	}
 
@@ -36,29 +26,51 @@ private:
 
 Position operator+(const Position& lhs, const Position& rhs);
 Position operator-(const Position& lhs, const Position& rhs);
+Position operator*(int64_t lhs, const Position& rhs);
+bool operator<(const Position& lhs, const Position& rhs);
 
 enum class Diffusion {
-	d10 = 0, d01 = 1, d_11 = 2, d_10 = 3, d0_1 = 4, d1_1 = 5,
+	d10 = 0, d_10 = 1,
 };
 
-const Position diffusionResolver[6]{
+const Position diffusionResolver[2] {
 	Position(1, 0),
-	Position(0, 1),
-	Position(-1, 1),
 	Position(-1, 0),
-	Position(0, -1),
-	Position(1, -1),
 };
 
 enum class AtomType {
 	empty, bulk, oxygen, nitrogen,
 };
 
-class Ligand {
-public:
-	Ligand(AtomType ligandType, Position position)
-		: type(ligandType), position(position) {};
+struct DiffusionEvent {
+	DiffusionEvent(Position moleculePos, Diffusion movement)
+		: moleculePos(moleculePos), movement(movement) {
+	};
+	Position moleculePos;
+	Diffusion movement;
+};
 
-	AtomType type;
-	Position position;
+struct GridCell {
+	GridCell() : atomType(AtomType::empty), bounds(0) {
+		posInEventList[0] = posInEventList[1] = c::empty;
+	};
+	//GridCell& operator=(const GridCell&) = delete;
+	//GridCell(const GridCell&) = delete;
+
+	void setCell(AtomType atomtype) {
+		atomType = atomtype;
+	}
+	void setEmpty() {
+		atomType = AtomType::empty;
+	}
+	void setDiffEvent(Diffusion shift, int64_t newPos) {
+		posInEventList[static_cast<int64_t>(shift)] = newPos;
+	}
+	int64_t diffEvent(Diffusion shift) const {
+		return posInEventList[static_cast<int64_t>(shift)];
+	}
+
+	AtomType atomType;
+	int64_t posInEventList[2];
+	int64_t bounds;
 };

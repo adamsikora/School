@@ -1,25 +1,23 @@
 #pragma once
 
-#include "Molecule.h"
+#include "BaseClass.h"
+#include "Lattice.h"
 
 class Events;
 
 class EventLists {
 public:
-	EventLists(std::vector<Molecule>& reftoMol) : molecules(reftoMol) {}
+	EventLists(Lattice& reftogrid) : lattice(reftogrid) {}
 
 	friend class Events;
 
-	void properDiffEventReplace(int64_t posinMolList, Diffusion shift, int64_t oldBounds);
-	void properRotEventReplace(int64_t posinMolList, Rotation rot, int64_t oldBounds);
+	void properDiffEventReplace(GridCell& molecule, Diffusion shift, int64_t oldBounds);
 
-	void properDiffEventAddition(int64_t posinMolList, Diffusion shift, int64_t newBounds);
-	void properRotEventAddition(int64_t posinMolList, Rotation rot, int64_t newBounds);
+	void properDiffEventAddition(Position pos, Diffusion shift, int64_t newBounds);
 
 private:
-	std::vector<Molecule>& molecules;
+	Lattice& lattice;
 
 	std::vector<DiffusionEvent> _diffEvents[c::maxBoundCount];
-	std::vector<RotationEvent> _rotEvents[c::maxBoundCount];
 
 };

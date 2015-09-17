@@ -5,11 +5,11 @@
 
 void Events::simulation() {
 	bool hasError = false;
-	while (properties.time < c::finalTime) {
+	while (lattice.coverage() < c::finalCoverage) {
 		execute();
-		if (crossCheck()) {
-			hasError = true;
-		}
+		//if (crossCheck()) {
+		//	hasError = true;
+		//}
 	}
 	crossCheck(true);
 	std::cout << properties.showHead();
@@ -19,116 +19,205 @@ void Events::simulation() {
 	} else {
 		std::cout << "OK" << std::endl;
 	}
-	utils::saveFile("test.pdb", lattice.gridToPdb());
-	utils::loadInJMol("test.pdb");
+	std::cout << "Diff barrier = " << E_d << std::endl;
+	countBounds();
+	std::cout << std::endl;
+
+	std::stringstream name;
+	name << "separated" << E_d << ".pdb";
+	utils::saveFile(name.str(), lattice.gridToPdb());
+	//utils::loadInJMol(name.str());
 }
 
 void Events::execute() {
-	rates._setSums(eventLists._diffEvents, eventLists._rotEvents);
+	rates._setSums(eventLists._diffEvents);
 
 	properties.time -= log(_random.get01()) / rates._total;
 
 startOver:
 
-	double chooseEvent = (rates._totalAds + rates._totalDiff + rates._totalRot) * _random.get01();
+	double chooseEvent = (rates._total) * _random.get01();
 
 	if (chooseEvent < rates._totalAds) {
-		int pom = static_cast<int> ((chooseEvent / rates._totalAds) * c::A * c::nRotations);
-		Position pomPos(pom % c::h, pom / c::nRotations / c::h);
-		Rotation pomRot = static_cast<Rotation>(pom / c::A);
-		Molecule pomMol(pomPos, pomRot, phthalocyanine);
+		int pom = static_cast<int> ((chooseEvent / rates._totalAds) * c::A);
+		Position pomPos(pom % c::w, pom / c::w);
 
-		if (lattice.molDescent(pomMol))
-			alterEvents(lattice.addMolecule(pomMol)),
+		if (molDescent(pomPos)) {
+			lattice.addMolecule(pomPos);
+			alterEvents(pomPos);
 			properties.nAds++, properties.nEvents++;
-		else
+		} else {
 			goto startOver;
-	}
-	 else if (chooseEvent < rates._totalAds + rates._totalRot) {
-	 chooseEvent -= rates._totalAds;
-	 double cumulateRates = 0;
-	 int ei = 0, ej = 0;
-	 while (cumulateRates + rates._sumsofRot[ei] < chooseEvent)
-	 cumulateRates += rates._sumsofRot[ei++];
-	 ej = static_cast<int> (floor((chooseEvent - cumulateRates) / rates._rot[ei]));
-
-	 alterEvents(lattice.rotateMolecule(eventLists._rotEvents[ei][ej]));
-	 properties.nRot++, properties.nEvents++;
-	 }
-	else {
-		chooseEvent -= rates._totalAds + rates._totalRot;
+		}
+	} else {
+		chooseEvent -= rates._totalAds;
 		double cumulateRates = 0;
 		int ei = 0, ej = 0;
 		while (cumulateRates + rates._sumsofDiff[ei] < chooseEvent)
 			cumulateRates += rates._sumsofDiff[ei++];
 		ej = static_cast<int> (floor((chooseEvent - cumulateRates) / rates._diff[ei]));
 
-		alterEvents(lattice.moveMolecule(eventLists._diffEvents[ei][ej]));
+		DiffusionEvent diffEvent = eventLists._diffEvents[ei][ej];
+		lattice.moveMolecule(diffEvent);
+		for (int64_t direction = 0; direction < c::nDiffusions; ++direction) {
+			if (lattice[diffEvent.moleculePos].diffEvent(Diffusion(direction)) != c::empty) {
+				eventLists.properDiffEventReplace(lattice[diffEvent.moleculePos], Diffusion(direction), lattice[diffEvent.moleculePos].bounds);
+			}
+		}
+		alterEvents(diffEvent.moleculePos);
 		properties.nDiff++, properties.nEvents++;
 	}
 }
 
-void Events::alterEvents(int64_t posinMolList) {
-	std::set<int64_t> toAlter = lattice.getSetToAlter(posinMolList);
+void Events::alterEvents(Position pos) {
+	std::vector<Position> toAlter = lattice.getSetToAlter(pos);
 
-	for (std::set<int64_t>::iterator it = toAlter.begin(); it != toAlter.end(); it++) {
-		Molecule& molecule = lattice.moleculeVector()[*it];
-		int64_t oldBounds = molecule.bounds();
+	for (auto it = toAlter.begin(); it != toAlter.end(); it++) {
+		GridCell& molecule = lattice[*it];
+		int64_t oldBounds = molecule.bounds;
 		int64_t newBounds = lattice.recalculateBounds(*it);
 
 		for (int64_t direction = 0; direction < c::nDiffusions; ++direction) {
 			if (molecule.diffEvent(Diffusion(direction)) != c::empty) {
-				eventLists.properDiffEventReplace(*it, Diffusion(direction), oldBounds);
-			}
-		}
-		for (int64_t rotation = 0; rotation < c::nRotations; ++rotation) {
-			if (molecule.rotEvent(Rotation(rotation)) != c::empty) {
-				eventLists.properRotEventReplace(*it, Rotation(rotation), oldBounds);
+				eventLists.properDiffEventReplace(molecule, Diffusion(direction), oldBounds);
 			}
 		}
 
 		for (int64_t direction = 0; direction < c::nDiffusions; ++direction) {
 			assert(molecule.diffEvent(Diffusion(direction)) == c::empty);
-			if (lattice.isFree(*it, diffusionResolver[direction], molecule.rotation)) {
+			if (lattice[*it + c::ptcdaLength * diffusionResolver[direction]].atomType == AtomType::empty &&
+					lattice[*it + c::ptcdaLength * diffusionResolver[direction] + diffusionResolver[direction]].atomType == AtomType::empty) {
 				eventLists.properDiffEventAddition(*it, Diffusion(direction), newBounds);
 			}
 		}
-		for (int64_t rotation = 0; rotation < c::nRotations; ++rotation) {
-			assert(molecule.rotEvent(Rotation(rotation)) == c::empty);
-			if (lattice.isFree(*it, Position(0, 0), Rotation(rotation))) {
-				eventLists.properRotEventAddition(*it, Rotation(rotation), newBounds);
+	}
+}
+
+bool Events::molDescent(Position& pos) {
+	for (int64_t tries = 0; tries < 100; ++tries) {
+		if (lattice.isFree(pos)) {
+			return true;
+		} else {
+			int64_t type = _random.getIntFrom0To(2 + 2 * c::ptcdaWidth);
+			if (type < 2) {
+				pos = pos + Position(0, (type == 0) ? 1 : -1);
+			} else {
+				type -= 2;
+				pos = pos + Position((type < c::ptcdaWidth) ? 1 : -1, 0);
+			}
+			pos.normalize();
+		}
+	}
+	return false;
+}
+
+void Events::countBounds() {
+	std::vector<int64_t> boundsPerType(c::ptcdaBondLength, 0);
+	double totalBounds = 0;
+	for (int64_t i = 0; i < c::A; ++i) {
+		if (lattice._grid[i].atomType != AtomType::empty) {
+			int64_t temp = lattice._grid[i].bounds;
+			for (int64_t j = 0; j < c::boundsPerType; ++j) {
+				if (temp % c::boundTypes != 0) {
+					++boundsPerType[temp % c::boundTypes - 1];
+					++totalBounds;
+					temp /= c::boundTypes;
+				}
 			}
 		}
-
-		/*int oldBounds = lattice._molecules[*it].getBounds();
-		lattice.boundCount(lattice._molecules[*it]);
-		int newBounds = lattice._molecules[*it].getBounds();
-
-		if (newBounds != oldBounds) {
-			for (int i = 0; i < 4; i++)
-				if (grid._molecules[*it].getDiffEventPoint(i) != c::empty)
-					eventLists.properDiffEventReplace(*it, i, oldBounds);
-			for (int i = 0; i < 2; i++)
-				if (grid._molecules[*it].getRotEventPoint(i) != c::empty)
-					eventLists.properRotEventReplace(*it, i, oldBounds);
-		}
-
-		for (int i = 0; i < 4; i++)
-			if (grid._molecules[*it].getDiffEventPoint(i) == c::empty)
-				if (grid.isMoveFree(*it, i))
-					eventLists.properDiffEventAddition(*it, i, newBounds);
-				else;
-			else
-				if (!grid.isMoveFree(*it, i))
-					eventLists.properDiffEventReplace(*it, i, oldBounds);
-
-		for (int i = 0; i < 2; i++)
-			if (grid._molecules[*it].getRotEventPoint(i) == c::empty)
-				if (grid.isRotFree(*it, i))
-					eventLists.properRotEventAddition(*it, i, newBounds);
-				else;
-			else
-				if (!grid.isRotFree(*it, i))
-					eventLists.properRotEventReplace(*it, i, oldBounds);*/
 	}
+	for (int64_t i = 0; i < c::ptcdaBondLength; ++i) {
+		std::cout << c::ptcdaBondLength - i - 1 << " common dimers: " << boundsPerType[i] / double(totalBounds) << std::endl;
+	}
+}
+
+int64_t Events::crossCheck(bool correctResultsReporting) {
+	int64_t molCount = 0;
+	for (int64_t i = 0; i < c::A; ++i) {
+		if (lattice._grid[i].atomType != AtomType::empty) {
+			++molCount;
+		}
+	}
+	if (molCount != properties.nAds) {
+		std::cout << "mol count should be " << properties.nAds << " but is " << molCount << std::endl;
+	} else if (correctResultsReporting) {
+		std::cout << "count OK" << std::endl;
+	}
+	// collision checking
+	int64_t nCrowded = 0;
+	for (int64_t j = 0; j < c::h; ++j) {
+		for (int64_t i = 0; i < c::w; ++i) {
+			if (lattice._grid[lattice.to1D(i, j)].atomType != AtomType::empty) {
+				for (int64_t k = 1; k < c::ptcdaLength; ++k) {
+					if (lattice._grid[lattice.to1D(i + k, j)].atomType != AtomType::empty)
+						++nCrowded;
+					if (lattice._grid[lattice.to1D(i - k, j)].atomType != AtomType::empty)
+						++nCrowded;
+				}
+			}
+		}
+	}
+	if (nCrowded > 0) {
+		std::cout << "crowded counts:" << nCrowded << std::endl;
+	} else if (correctResultsReporting) {
+		std::cout << "crowd OK" << std::endl;
+	}
+	// bounds checking
+	int64_t nBadBounds = 0;
+	for (int64_t i = 0; i < c::w; ++i) {
+		for (int64_t j = 0; j < c::h; ++j) {
+			if (lattice[Position(i, j)].atomType != AtomType::empty) {
+				int64_t old = lattice[Position(i, j)].bounds;
+				if (lattice.recalculateBounds(Position(i, j)) != old) {
+					++nBadBounds;
+				}
+			}
+		}
+	}
+	if (nBadBounds > 0) {
+		std::cout << "bad bounds count:" << nBadBounds << std::endl;
+	} else if (correctResultsReporting) {
+		std::cout << "bounds OK" << std::endl;
+	}
+	// correct diff links forward
+	int64_t nBadForwardLinks = 0;
+	for (int64_t i = 0; i < c::A; ++i) {
+		if (lattice._grid[i].atomType != AtomType::empty) {
+			if (lattice._grid[i].diffEvent(Diffusion::d10) != c::empty) {
+				DiffusionEvent diff = eventLists._diffEvents[lattice._grid[i].bounds][lattice._grid[i].diffEvent(Diffusion::d10)];
+				if (diff.movement != Diffusion::d10 || lattice.to1D(diff.moleculePos) != i) {
+					++nBadForwardLinks;
+				}
+			}
+			if (lattice._grid[i].diffEvent(Diffusion::d_10) != c::empty) {
+				DiffusionEvent diff = eventLists._diffEvents[lattice._grid[i].bounds][lattice._grid[i].diffEvent(Diffusion::d_10)];
+				if (diff.movement != Diffusion::d_10 || lattice.to1D(diff.moleculePos) != i) {
+					++nBadForwardLinks;
+				}
+			}
+		}
+	}
+	if (nBadForwardLinks > 0) {
+		std::cout << "bad forward links:" << nBadBounds << std::endl;
+	} else if (correctResultsReporting) {
+		std::cout << "forward links OK" << std::endl;
+	}
+
+	// correct diff links backward
+	int64_t nBadBackwardLinks = 0;
+	for (int64_t i = 0; i < c::maxBoundCount; ++i) {
+		for (uint64_t j = 0; j < eventLists._diffEvents[i].size(); ++j) {
+			DiffusionEvent diff = eventLists._diffEvents[i][j];
+			if (lattice[diff.moleculePos].atomType == AtomType::empty || lattice[diff.moleculePos].bounds != i || lattice[diff.moleculePos].diffEvent(diff.movement) != j) {
+				++nBadBackwardLinks;
+			}
+		}
+	}
+	if (nBadBackwardLinks > 0) {
+		std::cout << "bad backward links:" << nBadBounds << std::endl;
+	} else if (correctResultsReporting) {
+		std::cout << "backward links OK" << std::endl;
+	}
+
+	return nCrowded;
 }

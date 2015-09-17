@@ -1,50 +1,36 @@
 #pragma once
 
-
-#include "Molecule.h"
-
+#include "BaseClass.h"
 
 inline std::string getAtomType(AtomType atomType) {
 	switch (atomType) {
-	case AtomType::bulk: return " Ag";
-	case AtomType::oxygen: return " O ";
-	case AtomType::nitrogen: return " U ";
-	default: assert(!"Shold never get here"); return "";
+		case AtomType::bulk: return " Ag";
+		case AtomType::oxygen: return " O ";
+		case AtomType::nitrogen: return " U ";
+		default: assert(!"Should never get here"); return "";
 	}
 }
-
-struct GridCell {
-	GridCell() : molecule(c::empty), atomType(AtomType::empty) {};
-	void setCell(int64_t molec, AtomType atomtype) { molecule = molec; atomType = atomtype; }
-	void setEmpty() { molecule = c::empty; atomType = AtomType::empty; }
-
-	bool differentMolecule(int64_t moleculePos) const {
-		return molecule != moleculePos && molecule != c::empty;
-	}
-
-	int64_t molecule;
-	AtomType atomType;
-};
-
-class Events;
 
 class Lattice {
 public:
 	Lattice() : _grid(c::A, GridCell()) {};
+	Lattice& operator=(const Lattice&) = delete;
+	Lattice(const Lattice&) = delete;
 
-	int64_t addMolecule(Molecule molecule);
-	int64_t moveMolecule(DiffusionEvent de);
-	int64_t rotateMolecule(RotationEvent re);
+	void addMolecule(Position pos);
+	void moveMolecule(DiffusionEvent de);
 
-	std::vector<Molecule>& moleculeVector() { return _molecules; }
+	bool isFree(Position pos) const;
+	std::vector<Position> getSetToAlter(Position pos) const;
+	int64_t recalculateBounds(Position pos);
 
-	bool isFree(int64_t molecule, Position shift, Rotation rotation) const;
-	int64_t occupiedCount(const Molecule& mol) const;
-	bool molDescent(Molecule& mol) const;
-	std::set<int64_t> getSetToAlter(int64_t pos) const;
-	int64_t recalculateBounds(int64_t pos);
+	double coverage();
 
 	std::string gridToPdb() const;
+
+	GridCell& operator[](Position pos) {
+		return _grid[to1D(pos)];
+	}
 
 	friend class Events;
 
@@ -58,9 +44,5 @@ private:
 			c::w * ((pos.y() < 0 || pos.y() >= c::h) ? (pos.y() + c::h) % c::h : pos.y());
 	}
 
-	void printMolecule(const Molecule& molecule, int64_t position);
-	void dePrintMolecule(const Molecule& molecule);
-
 	std::vector<GridCell> _grid;
-	std::vector<Molecule> _molecules;
 };
