@@ -24,7 +24,7 @@ private:
 
 	std::vector<std::vector<double>> _desirability;
 	std::vector<std::vector<double>> _pheromone;
-	int64_t _nAnts, _nEpochs;
+	int64_t _nAnts, _nChosenAnts, _nEpochs;
 	double _alpha, _beta;
 	double _pheromoneMax, _pheromoneMin;
 	double _dissipationRate, _depositionStrength;

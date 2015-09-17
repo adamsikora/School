@@ -24,11 +24,11 @@ double AntColonyTsp::findShortestPath() {
 }
 
 void AntColonyTsp::init() {
-	_nEpochs = 100000;
+	_nEpochs = 1000;
 	_nAnts = 10;
 	_alpha = 1.0;
 	_beta = 1.0;
-	_dissipationRate = 0.95;
+	_dissipationRate = 0.9;
 	_pheromoneMin = 0.01;
 	_pheromoneMax = 1.0;
 	_depositionStrength = 0.1;
@@ -113,7 +113,7 @@ void AntColonyTsp::pheromoneUpdate() {
 
 	for (auto &ant : _ants) {
 		for (int64_t i = 0; i < _nPoints; ++i) {
-			_pheromone[i][(i + 1) % _nPoints] = _pheromone[(i + 1) % _nPoints][i] += _depositionStrength / ant.pathLength;
+			_pheromone[ant.visitOrder[i]][ant.visitOrder[(i + 1) % _nPoints]] = _pheromone[ant.visitOrder[(i + 1) % _nPoints]][ant.visitOrder[i]] += _depositionStrength / ant.pathLength;
 		}
 	}
 
