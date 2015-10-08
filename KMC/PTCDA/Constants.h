@@ -36,7 +36,7 @@ namespace c {
 	const double T = 273.14 + 220;
 
 	const double finalTime = 0.0;
-	const double finalCoverage = 0.2;
+	const double finalCoverage = 0.4;
 
 	const std::array<int64_t, c::nDiffusions> defaultDiffusions{ { c::empty, c::empty } };
 }

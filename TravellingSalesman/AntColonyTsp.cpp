@@ -24,7 +24,7 @@ double AntColonyTsp::findShortestPath() {
 }
 
 void AntColonyTsp::init() {
-	_nEpochs = 1000;
+	_nEpochs = 10000;
 	_nAnts = 10;
 	_alpha = 1.0;
 	_beta = 1.0;

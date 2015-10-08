@@ -24,7 +24,7 @@ void Events::simulation() {
 	std::cout << std::endl;
 
 	std::stringstream name;
-	name << "separated" << E_d << ".pdb";
+	name << "double" << E_d << ".pdb";
 	utils::saveFile(name.str(), lattice.gridToPdb());
 	//utils::loadInJMol(name.str());
 }

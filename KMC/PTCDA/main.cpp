@@ -5,7 +5,7 @@
 #include "Constants.h"
 
 int main() {
-	std::string outFile = "separated.txt";
+	std::string outFile = "double.txt";
 	remove(outFile.c_str());
 	freopen(outFile.c_str(), "w", stdout);
 	for (double ed = 1.7; ed >= 1.1; ed -= 0.05) {
